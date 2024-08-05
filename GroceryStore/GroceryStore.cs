@@ -1,5 +1,6 @@
 ﻿using GroceryStore.Business.Interfaces;
 using GroceryStore.Business.Service;
+using GroceryStore.DataAccess.Repositories;
 
 
 namespace GroceryStore.Presentation
@@ -12,7 +13,10 @@ namespace GroceryStore.Presentation
 
             #region Class Instatiation
             //SOME CLASSES
-            IStoreManager storeManager = new StoreManager();
+            var inventoryRepository = new InventoryRepository();
+            var inventoryService = new InventoryService(inventoryRepository);
+
+            IStoreManager storeManager = new StoreManager(inventoryService);
             #endregion
 
             string userInput = "default";
