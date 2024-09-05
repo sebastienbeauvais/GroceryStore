@@ -14,9 +14,12 @@ namespace GroceryStore.Presentation
             #region Class Instatiation
             // Preparing for dependencies
             var inventoryRepository = new InventoryRepository();
-            var inventoryService = new InventoryService(inventoryRepository);
+            var cartRepository = new CartRepository();
 
-            IStoreManager storeManager = new StoreManager(inventoryService);
+            var inventoryService = new InventoryService(inventoryRepository);
+            var cartService = new CartService(cartRepository);
+
+            IStoreManager storeManager = new StoreManager(inventoryService, cartService);
             #endregion
 
             string userInput = "default";

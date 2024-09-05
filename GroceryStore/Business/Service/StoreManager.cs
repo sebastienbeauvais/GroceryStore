@@ -10,23 +10,44 @@ namespace GroceryStore.Business.Service
     {
         //Initialize some repository class?
         IInventoryService _inventoryService;
+        ICartService _cartService;
 
-        public StoreManager(IInventoryService inventoryService) 
+        public StoreManager(IInventoryService inventoryService, ICartService cartService)
         {
             _inventoryService = inventoryService;
-        }
+            _cartService = cartService;
+         }
 
         private void InitializeInventory()
         {
             _inventoryService.InitializeStoreInventory();
         }
-        //Move to different layer?
+        private void InitializeCart() 
+        {
+            _cartService.InitializeStoreCart();
+        }
+
         private void DisplayInventory(IEnumerable<Item> inventory)
         {
             foreach (var item in inventory)
             {
                 Console.WriteLine($"{item.Id}. {item.Name} - ${item.Price:F2}");
             }
+        }
+        private void DisplayCartItems(IEnumerable<CartItem> cart)
+        {
+            if (cart.Count() > 0)
+            {
+                foreach (var item in cart)
+                {
+                    Console.WriteLine($"{item.Name} - {item.Quantity}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Your cart is empty!");
+            }
+            
         }
 
         public void ShowStoreMenu()
@@ -51,6 +72,8 @@ namespace GroceryStore.Business.Service
                     break;
                 case "3":
                     //TODO - get cart items
+                    var cart = _cartService.GetItemsInCart();
+                    DisplayCartItems(cart);
                     break;
                 case "4":
                     //TODO - checkout
