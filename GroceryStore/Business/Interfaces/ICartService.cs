@@ -8,5 +8,6 @@ namespace GroceryStore.Business.Interfaces
         IEnumerable<CartItem> GetItemsInCart();
         List<CartItem> PrePackagedCart();
         double GetCartTotal(List<CartItem> shoppingCart, IEnumerable<Item> storeInventory);
+        void DisplayCartInfo(List<CartItem> shoppingCart, double cartTotal);
     }
 }

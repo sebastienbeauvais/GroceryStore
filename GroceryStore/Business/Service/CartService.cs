@@ -49,5 +49,15 @@ namespace GroceryStore.Business.Service
             }
             return total;
         }
+
+        public void DisplayCartInfo(List<CartItem> shoppingCart, double cartTotal)
+        {
+            Console.WriteLine("-------- YOUR SHOPPING CART ---------");
+            foreach(var cartItem in shoppingCart){
+                Console.WriteLine($"{cartItem.Name} - Quantity: {cartItem.Quantity}");
+            }
+            Console.WriteLine("-------------------------------------");
+            Console.WriteLine($"Total: {cartTotal}");
+        }
     }
 }

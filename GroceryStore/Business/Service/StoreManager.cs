@@ -27,27 +27,12 @@ namespace GroceryStore.Business.Service
             _cartService.InitializeStoreCart();
         }
 
-        private void DisplayInventory(IEnumerable<Item> inventory)
+        private void DisplayInventory(IEnumerable<Item1> inventory)
         {
             foreach (var item in inventory)
             {
                 Console.WriteLine($"{item.Id}. {item.Name} - ${item.Price:F2}");
             }
-        }
-        private void DisplayCartItems(IEnumerable<CartItem> cart)
-        {
-            if (cart.Count() > 0)
-            {
-                foreach (var item in cart)
-                {
-                    Console.WriteLine($"{item.Name} - {item.Quantity}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Your cart is empty!");
-            }
-            
         }
 
         public void ShowStoreMenu()
@@ -62,24 +47,27 @@ namespace GroceryStore.Business.Service
         }
         public void HandleUserInput(string userInput)
         {            
+            // Since we use inventory in multiple cases we can create it once and use it where needed
+            var inventory = _inventoryService.GetStoreInventory();
+            
             switch (userInput)
             {
                 case "1":
-                    //TODO - list store inventory
-                    var inventory = _inventoryService.GetStoreInventory();
                     DisplayInventory(inventory);
                     break;
                 case "2":
                     //TODO - future functionality
+                    Console.WriteLine("Feature coming soon!!");
                     break;
                 case "3":
-                    //TODO - get cart items
+                    // this can probably be cleaned up. I dont think we need a private method
+                    // to display the cart items. In addition we can probably consolidate all
+                    // these method calls into a single Helper and call them there
                     var shoppingCart = _cartService.PrePackagedCart();
-                    var storeInventory = _inventoryService.GetStoreInventory();
-                    var cartTotal = _cartService.GetCartTotal(shoppingCart, storeInventory);
-                    //var cart = _cartService.GetItemsInCart();
-                    DisplayCartItems(shoppingCart);
-                    Console.WriteLine($"Cart total: {cartTotal}");
+                    var cartTotal = _cartService.GetCartTotal(shoppingCart, inventory);
+                    _cartService.DisplayCartInfo(shoppingCart, cartTotal);
+                    //DisplayCartItems(shoppingCart);
+                    //Console.WriteLine($"Cart total: {cartTotal}");
                     break;
                 case "4":
                     //TODO - checkout
