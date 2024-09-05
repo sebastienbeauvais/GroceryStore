@@ -6,5 +6,7 @@ namespace GroceryStore.Business.Interfaces
     {
         List<CartItem> InitializeStoreCart();
         IEnumerable<CartItem> GetItemsInCart();
+        List<CartItem> PrePackagedCart();
+        double GetCartTotal(List<CartItem> shoppingCart, IEnumerable<Item> storeInventory);
     }
 }

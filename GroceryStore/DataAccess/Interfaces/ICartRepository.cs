@@ -11,5 +11,6 @@ namespace GroceryStore.DataAccess.Interfaces
     {
         List<CartItem> InitializeStoreCart();
         IEnumerable<CartItem> GetItemsInCart();
+        List<CartItem> PrePackagedCart();
     }
 }

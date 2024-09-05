@@ -31,7 +31,7 @@ namespace GroceryStore.DataAccess.Repositories
                 new Item { Id = 15, Name = "Cheddar Cheese", Price = 4.49 },
                 new Item { Id = 16, Name = "Salmon", Price = 15.99 },
                 new Item { Id = 17, Name = "Chicken", Price = 12.99 },
-                new Item { Id = 18, Name = "Wagyu Beed", Price = 105.99 }
+                new Item { Id = 18, Name = "Wagyu Beef", Price = 105.99 }
             };
             return _items;
         }

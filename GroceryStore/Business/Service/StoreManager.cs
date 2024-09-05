@@ -52,11 +52,13 @@ namespace GroceryStore.Business.Service
 
         public void ShowStoreMenu()
         {
+            Console.WriteLine("\n");
             Console.WriteLine("1. Show store inventory");
             Console.WriteLine("2. Add item(s) to cart");
-            Console.WriteLine("3. Show items in your cart");
+            Console.WriteLine("3. Select pre-packaged shopping cart");
             Console.WriteLine("4. Checkout");
             Console.WriteLine("5. Leave store");
+            Console.WriteLine("\n");
         }
         public void HandleUserInput(string userInput)
         {            
@@ -68,12 +70,16 @@ namespace GroceryStore.Business.Service
                     DisplayInventory(inventory);
                     break;
                 case "2":
-                    //TODO - add item to cart
+                    //TODO - future functionality
                     break;
                 case "3":
                     //TODO - get cart items
-                    var cart = _cartService.GetItemsInCart();
-                    DisplayCartItems(cart);
+                    var shoppingCart = _cartService.PrePackagedCart();
+                    var storeInventory = _inventoryService.GetStoreInventory();
+                    var cartTotal = _cartService.GetCartTotal(shoppingCart, storeInventory);
+                    //var cart = _cartService.GetItemsInCart();
+                    DisplayCartItems(shoppingCart);
+                    Console.WriteLine($"Cart total: {cartTotal}");
                     break;
                 case "4":
                     //TODO - checkout

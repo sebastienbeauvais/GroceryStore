@@ -11,7 +11,7 @@ namespace GroceryStore.Presentation
         {
             Console.WriteLine("Welcome to the Grocery Store! Please let us know what you would like to do\n");
 
-            #region Class Instatiation
+            #region Class Instantiation
             // Preparing for dependencies
             var inventoryRepository = new InventoryRepository();
             var cartRepository = new CartRepository();
