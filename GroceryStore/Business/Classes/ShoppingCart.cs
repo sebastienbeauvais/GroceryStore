@@ -1,5 +1,6 @@
 ﻿using GroceryStore.Business.Interfaces;
 using GroceryStore.Models;
+using System.Xml.Serialization;
 
 namespace GroceryStore.Business.Classes
 {
@@ -41,7 +42,8 @@ namespace GroceryStore.Business.Classes
             Console.WriteLine($"Total: {cartTotal}");
         }
 
-        private double GetCartTotal(IEnumerable<StoreItem> storeInventory, IEnumerable<CartItem> shoppingCart)
+
+        public double GetCartTotal(IEnumerable<StoreItem> storeInventory, IEnumerable<CartItem> shoppingCart)
         {
             var cartTotal = 0.0;
             foreach (var cartItem in shoppingCart)

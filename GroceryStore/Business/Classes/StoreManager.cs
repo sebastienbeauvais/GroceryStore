@@ -64,10 +64,11 @@ namespace GroceryStore.Business.Service
                 case "4":
                     //TODO - checkout
                     var shoppingCart = cart.GetShoppingCartItems();
-                    register.Checkout(shoppingCart);
+                    register.Checkout(shoppingCart, cart.GetCartTotal(storeInventoryDb, shoppingCart));
                     break;
+                case "5":
+                    return;
             }
-
         }
     }
 }

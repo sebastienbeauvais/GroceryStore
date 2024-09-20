@@ -8,11 +8,11 @@ namespace GroceryStore.Business.Classes
         public CashRegister() { }
         private List<Coupon> availableCoupons = new List<Coupon>()
         {
-            new Coupon { Id = 1, Name = "10% Off Total", Description = "Applied 10% off your total cart", Discount = 0.1 },
-            new Coupon { Id = 2, Name = "25% Off Total", Description = "Applied 25% off your total cart", Discount = 0.25 },
+            new Coupon { Id = 1, Name = "10OFF", Description = "Applied 10% off your total cart", Discount = 0.1 },
+            new Coupon { Id = 2, Name = "25OFF", Description = "Applied 25% off your total cart", Discount = 0.25 },
             new Coupon { Id = 3, Name = "BOGOFree", Description = "Buy one item get one free", Discount = 1.0 },
         };
-        public void Checkout(IEnumerable<CartItem> shoppingCart)
+        public void Checkout(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal)
         {
             string userIn = string.Empty;
             while (userIn != "Y" || userIn != "N")
@@ -33,6 +33,8 @@ namespace GroceryStore.Business.Classes
                 {
                     //TODO
                     Console.WriteLine("No coupon applied...");
+                    Console.WriteLine($"Thank you for coming. Your total is: ${shoppingCartTotal}");
+                    return;
                 }
                 else
                 {
@@ -44,7 +46,7 @@ namespace GroceryStore.Business.Classes
         {
             foreach(var coupon in availableCoupons)
             {
-                Console.WriteLine($"{coupon.Id}, {coupon.Name}, {coupon.Description}");
+                Console.WriteLine($"{coupon.Id} - {coupon.Name}, {coupon.Description}");
             }
         }
         private void ApplyCoupon(int couponId, IEnumerable<CartItem> shoppingCart, IEnumerable<Coupon> availableCoupons)
