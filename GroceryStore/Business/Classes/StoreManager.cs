@@ -66,8 +66,6 @@ namespace GroceryStore.Business.Service
                     var shoppingCart = cart.GetShoppingCartItems();
                     register.Checkout(shoppingCart, cart.GetCartTotal(storeInventoryDb, shoppingCart));
                     break;
-                case "5":
-                    return;
             }
         }
     }

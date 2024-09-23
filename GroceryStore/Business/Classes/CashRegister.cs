@@ -25,8 +25,7 @@ namespace GroceryStore.Business.Classes
                     ShowAvailableCoupons(availableCoupons);
                     Console.WriteLine("Which coupon would you like to apply (enter the ID): ");
                     var couponId = Convert.ToInt32(Console.ReadLine());
-                    Console.WriteLine("Applyin coupon...");
-                    ApplyCoupon(couponId, shoppingCart, availableCoupons);
+                    ApplyCoupon(couponId, shoppingCart, availableCoupons, shoppingCartTotal);
 
                 }
                 else if (userIn == "N")
@@ -34,7 +33,7 @@ namespace GroceryStore.Business.Classes
                     //TODO
                     Console.WriteLine("No coupon applied...");
                     Console.WriteLine($"Thank you for coming. Your total is: ${shoppingCartTotal}");
-                    return;
+                    Environment.Exit(0);
                 }
                 else
                 {
@@ -49,9 +48,42 @@ namespace GroceryStore.Business.Classes
                 Console.WriteLine($"{coupon.Id} - {coupon.Name}, {coupon.Description}");
             }
         }
-        private void ApplyCoupon(int couponId, IEnumerable<CartItem> shoppingCart, IEnumerable<Coupon> availableCoupons)
+        private void ApplyCoupon(int couponId, IEnumerable<CartItem> shoppingCart, IEnumerable<Coupon> availableCoupons, double shoppingCartTotal)
         {
             //TODO
+            var selectedCoupon = availableCoupons.FirstOrDefault(x => x.Id == couponId);
+            if (selectedCoupon != null && selectedCoupon == availableCoupons.FirstOrDefault(x => x.Id == selectedCoupon.Id) && selectedCoupon.Id != 3) 
+            {
+                Console.WriteLine("Applyin coupon...");
+                var newCartTotal = shoppingCartTotal - (shoppingCartTotal * selectedCoupon.Discount);
+                Console.WriteLine($"Your new total is: {newCartTotal}");
+                Console.WriteLine($"Thank you for coming. Today you saved: $" +
+                    $"{(shoppingCartTotal * selectedCoupon.Discount)}");
+                Environment.Exit(0);
+            } 
+            else if (selectedCoupon.Id == 3)
+            {
+                double newCartTotal = 0;
+                foreach (var item in shoppingCart) // This is not iterating over each item individually. It is only going over it once which ruins the calc
+                {
+                    if (item.Quantity > 1)
+                    {
+                        item.Price -= (item.Price * selectedCoupon.Discount / item.Quantity);
+                        newCartTotal += item.Price;
+                    }
+                    else
+                    {
+                        newCartTotal += item.Price;
+                    }
+                }
+                Console.WriteLine($"Your new total is: {newCartTotal}");
+                Console.WriteLine($"Thank you for coming. Today you saved: ${shoppingCartTotal - newCartTotal}");
+                Environment.Exit(0);
+            }
+            else
+            {
+                Console.WriteLine("Sorry, that is not a valid coupon code");
+            }
         }
     }
 }

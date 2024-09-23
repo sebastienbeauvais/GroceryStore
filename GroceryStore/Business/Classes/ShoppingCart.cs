@@ -54,6 +54,7 @@ namespace GroceryStore.Business.Classes
                 if (matchingItem != null)
                 {
                     cartTotal += matchingItem.Price * itemQuantity;
+                    cartItem.Price = matchingItem.Price;
                 }
             }
             return cartTotal;
