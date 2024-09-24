@@ -13,10 +13,10 @@ namespace GroceryStore.Business.Service
 
         private List<StoreItem> storeInventoryDb = new List<StoreItem>() {
                 new StoreItem { Id = 1, Name = "Apple", Price = 0.50 },
+                new StoreItem { Id = 2, Name = "Banana", Price = 0.20 },
                 new StoreItem { Id = 3, Name = "Carrot", Price = 0.10 },
                 new StoreItem { Id = 4, Name = "Tomato", Price = 0.30 },
                 new StoreItem { Id = 5, Name = "Milk", Price = 1.50 },
-                new StoreItem { Id = 2, Name = "Banana", Price = 0.20 },
                 new StoreItem { Id = 6, Name = "White Bread", Price = 3.00 },
                 new StoreItem { Id = 7, Name = "Whole Wheat Bread", Price = 3.50 },
                 new StoreItem { Id = 8, Name = "Eggs (12)", Price = 7.99 },

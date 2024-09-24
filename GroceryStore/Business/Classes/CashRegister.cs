@@ -56,27 +56,31 @@ namespace GroceryStore.Business.Classes
             {
                 Console.WriteLine("Applyin coupon...");
                 var newCartTotal = shoppingCartTotal - (shoppingCartTotal * selectedCoupon.Discount);
-                Console.WriteLine($"Your new total is: {newCartTotal}");
-                Console.WriteLine($"Thank you for coming. Today you saved: $" +
-                    $"{(shoppingCartTotal * selectedCoupon.Discount)}");
+                Console.WriteLine($"Your new total is: ${newCartTotal}");
+                Console.WriteLine($"Thank you for coming. You saved: ${shoppingCartTotal - newCartTotal}");
                 Environment.Exit(0);
             } 
             else if (selectedCoupon.Id == 3)
             {
                 double newCartTotal = 0;
-                foreach (var item in shoppingCart) // This is not iterating over each item individually. It is only going over it once which ruins the calc
+                foreach (var item in shoppingCart)
                 {
-                    if (item.Quantity > 1)
+                    if (item.Quantity % 2 == 0)
                     {
-                        item.Price -= (item.Price * selectedCoupon.Discount / item.Quantity);
-                        newCartTotal += item.Price;
+                        var discountItemPrice = (((item.Price * item.Quantity) * selectedCoupon.Discount)*0.5);
+                        newCartTotal += discountItemPrice;
+                    }
+                    else if (item.Quantity > 2) 
+                    {
+                        var discountItemPrice = (item.Price * (item.Quantity/2));
+                        newCartTotal += (item.Price * item.Quantity) - discountItemPrice;
                     }
                     else
                     {
                         newCartTotal += item.Price;
                     }
                 }
-                Console.WriteLine($"Your new total is: {newCartTotal}");
+                Console.WriteLine($"Your new total is: ${newCartTotal}");
                 Console.WriteLine($"Thank you for coming. Today you saved: ${shoppingCartTotal - newCartTotal}");
                 Environment.Exit(0);
             }
