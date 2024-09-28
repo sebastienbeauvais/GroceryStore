@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using GroceryStore.Models.Interfaces;
 
 namespace GroceryStore.Models
 {
-    public class CartItem
+    public class CartItem : ICartItem
     {
         public int Id { get; set; }
         public String Name { get; set; }

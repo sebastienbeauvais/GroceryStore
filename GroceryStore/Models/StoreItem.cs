@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using GroceryStore.Models.Interfaces;
+
 
 namespace GroceryStore.Models
 {
-    public class StoreItem
+    public class StoreItem : IStoreItem
     {
         public int Id { get; set; }
         public string Name { get; set; }
