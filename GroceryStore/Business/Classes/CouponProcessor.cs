@@ -13,16 +13,13 @@ namespace GroceryStore.Business.Classes
         public CouponProcessor() { }
         public double ApplyCoupon(int couponId, IEnumerable<CartItem> shoppingCart, IEnumerable<Coupon> availableCoupons, double shoppingCartTotal)
         {
-            //TODO
             var selectedCoupon = availableCoupons.FirstOrDefault(x => x.Id == couponId);
+            // Apply stategy pattern here and use DI
             if (selectedCoupon != null && selectedCoupon == availableCoupons.FirstOrDefault(x => x.Id == selectedCoupon.Id) && selectedCoupon.Id != 3)
             {
                 Console.WriteLine("Applyin coupon...");
                 var newCartTotal = shoppingCartTotal - (shoppingCartTotal * selectedCoupon.Discount);
                 return newCartTotal;
-                /*Console.WriteLine($"Your new total is: ${newCartTotal}");
-                Console.WriteLine($"Thank you for coming. You saved: ${shoppingCartTotal - newCartTotal}");
-                Environment.Exit(0);*/
             }
             else if (selectedCoupon.Id == 3)
             {
@@ -44,16 +41,9 @@ namespace GroceryStore.Business.Classes
                         newCartTotal += item.Price;
                     }
                 }
-                /*Console.WriteLine($"Your new total is: ${newCartTotal}");
-                Console.WriteLine($"Thank you for coming. Today you saved: ${shoppingCartTotal - newCartTotal}");
-                Environment.Exit(0);*/
                 return newCartTotal;
             }
             return 0;
-            /*else
-            {
-                Console.WriteLine("Sorry, that is not a valid coupon code");
-            }*/
         }
         public void ShowAvailableCoupons(IEnumerable<Coupon> availableCoupons)
         {
