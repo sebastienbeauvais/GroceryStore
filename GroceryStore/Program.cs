@@ -1,36 +1,20 @@
 ﻿using GroceryStore.Business.Classes;
 using GroceryStore.Business.Interfaces;
 using GroceryStore.Business.Service;
+using GroceryStore.Presentation;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace GroceryStore
+namespace Program
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            // Build the service provider and configure DI
             var serviceProvider = ConfigureServices();
 
-            // Resolve IStoreManager from DI container
-            var storeManager = serviceProvider.GetRequiredService<IStoreManager>();
+            var storeManager = serviceProvider.GetRequiredService<GroceryStore.Presentation.GroceryStore>();
 
-            // Call Grocery Store logic
-            RunGroceryStore(storeManager);
-        }
-
-        private static void RunGroceryStore(IStoreManager storeManager)
-        {
-            Console.WriteLine("Welcome to the Grocery Store! Please let us know what you would like to do\n");
-
-            string userInput = "default";
-            while (userInput != "5")
-            {
-                storeManager.ShowStoreMenu();
-                userInput = Console.ReadLine();
-                storeManager.HandleUserInput(userInput);
-            }
-
-            Console.WriteLine("\nThank you for coming to the store. Please come again!");
+            storeManager.EnterStore();
         }
 
         private static ServiceProvider ConfigureServices()
@@ -38,13 +22,16 @@ namespace GroceryStore
             // Set up dependency injection
             var services = new ServiceCollection();
 
-            // Register services (StoreManager, CouponProcessor, etc.)
+            // Register services
+            services.AddScoped<GroceryStore.Presentation.GroceryStore, GroceryStore.Presentation.GroceryStore>();
             services.AddScoped<IStoreManager, StoreManager>();
-            services.AddScoped<ICouponProcessor, CouponProcessor>();
-            services.AddScoped<ICouponStrategy, StandardDiscountCouponStrategy>();
-            services.AddScoped<ICouponStrategy, BOGOFreeCouponStrategy>();
+            services.AddScoped<ICouponProcessor, CouponProcessor>(); //Update to use interface
+            services.AddScoped<ICouponStrategy, FlatDiscountCouponStrategy>();
+            services.AddScoped<ICouponStrategy, BogoFreeCouponStrategy>();
+            services.AddScoped<ICashRegister, CashRegister>();
+            services.AddScoped<IShoppingCart, ShoppingCart>();
+            services.AddScoped<ICouponHandler, CouponHandler>();
 
-            // Build the service provider
             return services.BuildServiceProvider();
         }
     }

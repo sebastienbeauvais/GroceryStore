@@ -7,9 +7,15 @@ namespace GroceryStore.Business.Service
 {
     public class StoreManager : IStoreManager
     {
-        public StoreManager() { }
-        IShoppingCart cart = new ShoppingCart();
-        ICashRegister register = new CashRegister();
+        private ICashRegister _register;
+        private IShoppingCart _shoppingCart;
+        public StoreManager(ICashRegister register, IShoppingCart shoppingCart) 
+        {
+            _register = register;
+            _shoppingCart = shoppingCart;
+        }
+        /*IShoppingCart cart = new ShoppingCart();
+        ICashRegister register = new CashRegister();*/
 
         private List<StoreItem> storeInventoryDb = new List<StoreItem>() {
                 new StoreItem { Id = 1, Name = "Apple", Price = 0.50 },
@@ -56,15 +62,15 @@ namespace GroceryStore.Business.Service
                     DisplayInventory(storeInventoryDb);
                     break;
                 case "2":
-                    cart.AddItemToShoppingCart(storeInventoryDb);
+                    _shoppingCart.AddItemToShoppingCart(storeInventoryDb);
                     break;
                 case "3":
-                    cart.ShowItemsInShoppingCart(storeInventoryDb);
+                    _shoppingCart.ShowItemsInShoppingCart(storeInventoryDb);
                     break;
                 case "4":
                     //TODO - checkout
-                    var shoppingCart = cart.GetShoppingCartItems();
-                    register.Checkout(shoppingCart, cart.GetCartTotal(storeInventoryDb, shoppingCart));
+                    var shoppingCart = _shoppingCart.GetShoppingCartItems();
+                    _register.Checkout(shoppingCart, _shoppingCart.GetCartTotal(storeInventoryDb, shoppingCart));
                     break;
             }
         }

@@ -10,5 +10,6 @@ namespace GroceryStore.Business.Interfaces
     public interface ICouponProcessor
     {
         public double ApplyCoupon(int couponId, IEnumerable<CartItem> shoppingCart, IEnumerable<Coupon> availableCoupons, double shoppingCartTotal);
+        public void ShowAvailableCoupons(IEnumerable<Coupon> availableCoupons);
     }
 }

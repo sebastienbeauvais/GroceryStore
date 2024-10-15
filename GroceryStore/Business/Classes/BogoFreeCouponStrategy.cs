@@ -1,4 +1,5 @@
-﻿using GroceryStore.Models;
+﻿using GroceryStore.Business.Interfaces;
+using GroceryStore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroceryStore.Business.Classes
 {
-    public class BogoFreeCouponStrategy
+    public class BogoFreeCouponStrategy : ICouponStrategy
     {
         public double ApplyCoupon(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal, Coupon coupon)
         {

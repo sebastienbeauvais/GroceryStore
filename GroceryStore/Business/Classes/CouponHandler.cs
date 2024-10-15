@@ -5,15 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using GroceryStore.Business.Interfaces;
 using GroceryStore.Models;
+using GroceryStore.Models.Interfaces;
 
 namespace GroceryStore.Business.Classes
 {
     public class CouponHandler : ICouponHandler
     {
-        public CouponHandler() 
+        private ICouponProcessor _couponProcessor;
+        public CouponHandler(ICouponProcessor couponProcessor) 
         {
+            _couponProcessor = couponProcessor;
         }
-        CouponProcessor couponProcessor = new CouponProcessor();
 
         private List<Coupon> availableCoupons = new List<Coupon>()
         {
@@ -33,12 +35,12 @@ namespace GroceryStore.Business.Classes
                 userIn = Console.ReadLine().ToUpper();
                 if (userIn == "Y")
                 {
-                    context = new UserSelectionContext(new ApplyCouponState(couponProcessor, availableCoupons));
+                    context = new UserSelectionContext(new ApplyCouponState(_couponProcessor, availableCoupons));
                     return context.HandleUserSelection(shoppingCart, shoppingCartTotal);
                 }
                 else if (userIn == "N")
                 {
-                    context = new UserSelectionContext(new ApplyCouponState(couponProcessor, availableCoupons));
+                    context = new UserSelectionContext(new ApplyCouponState(_couponProcessor, availableCoupons));
                     return context.HandleUserSelection(shoppingCart, shoppingCartTotal);
                 }
                 else
