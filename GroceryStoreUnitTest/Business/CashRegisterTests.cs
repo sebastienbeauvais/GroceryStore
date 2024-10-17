@@ -1,3 +1,5 @@
+using Autofac.Features.OwnedInstances;
+
 namespace GroceryStoreUnitTest
 {
     [TestClass]

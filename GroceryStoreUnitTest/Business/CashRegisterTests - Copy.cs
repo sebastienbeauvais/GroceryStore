@@ -1,10 +1,10 @@
 namespace GroceryStoreUnitTest
 {
     [TestClass]
-    public class CashRegisterTests
+    public class CashRegisterTests2
     {
         [TestMethod]
-        public void Test_CashRegister()
+        public void Test_CashRegister2()
         {
         }
     }
