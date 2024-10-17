@@ -5,15 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using GroceryStore.Business.Interfaces;
 using GroceryStore.Models;
+using GroceryStore.Models.Interfaces;
 
 namespace GroceryStore.Business.Classes
 {
     public class CouponHandler : ICouponHandler
     {
-        public CouponHandler() 
+        private ICouponProcessor _couponProcessor;
+        public CouponHandler(ICouponProcessor couponProcessor) 
         {
+            _couponProcessor = couponProcessor;
         }
-        CouponProcessor couponProcessor = new CouponProcessor();
 
         private List<Coupon> availableCoupons = new List<Coupon>()
         {
@@ -25,31 +27,29 @@ namespace GroceryStore.Business.Classes
         public double HandleUserSelection(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal)
         {
             string userIn = string.Empty;
+            UserSelectionContext context;
+
             while (userIn != "Y" || userIn != "N")
             {
                 Console.WriteLine("\nApply a coupon? (Y/N)");
                 userIn = Console.ReadLine().ToUpper();
                 if (userIn == "Y")
                 {
-                    couponProcessor.ShowAvailableCoupons(availableCoupons);
-                    Console.WriteLine("Which coupon would you like to apply (enter the ID): ");
-                    var couponId = Convert.ToInt32(Console.ReadLine());
-                    var newCartTotal = couponProcessor.ApplyCoupon(couponId, shoppingCart, availableCoupons, shoppingCartTotal);
-                    return newCartTotal;
-
+                    context = new UserSelectionContext(new ApplyCouponState(_couponProcessor, availableCoupons));
+                    return context.HandleUserSelection(shoppingCart, shoppingCartTotal);
                 }
                 else if (userIn == "N")
                 {
-                    Console.WriteLine("No coupon applied...");
-                    return shoppingCartTotal;
+                    context = new UserSelectionContext(new ApplyCouponState(_couponProcessor, availableCoupons));
+                    return context.HandleUserSelection(shoppingCart, shoppingCartTotal);
                 }
                 else
                 {
                     Console.WriteLine($"Sorry {userIn} is not a valid input. Please enter Y or N.");
-                    return 0;
-                } 
+                }
             }
-            return 0;
+            return shoppingCartTotal;
+
         }
     }
 }
