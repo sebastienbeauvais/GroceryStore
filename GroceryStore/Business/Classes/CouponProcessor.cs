@@ -18,6 +18,8 @@ namespace GroceryStore.Business.Classes
             {
                 var strategy = _couponStrategies[couponId];
                 return strategy.ApplyCoupon(shoppingCart, shoppingCartTotal, selectedCoupon);
+                // For more coupon strategies we would just need to create a new strategy class + add it to the GetCouponIdForStrategy (below)
+                // This breaks Open-Closed principal for GetCouponIdForStrategy
             }
             return shoppingCartTotal; // No valid coupon found
         }
@@ -30,10 +32,10 @@ namespace GroceryStore.Business.Classes
         }
         private int GetCouponIdForStrategy(ICouponStrategy strategy)
         {
-            // Map strategies to coupon IDs here. You could also use attributes or configuration to handle this.
+            //Change this to fetching Enum
+            if (strategy is FlatDiscountCouponStrategy) return 1;
             if (strategy is BogoFreeCouponStrategy) return 3;
-            if (strategy is FlatDiscountCouponStrategy) return 1; // Example for a standard discount coupon
-                                                                      // Add more mappings as needed.
+                                                                     
             throw new InvalidOperationException("Unknown coupon strategy.");
         }
     }
