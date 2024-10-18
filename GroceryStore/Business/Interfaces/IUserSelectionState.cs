@@ -10,5 +10,6 @@ namespace GroceryStore.Business.Interfaces
     public interface IUserSelectionState
     {
         double HandleUserSelection(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal);
+        double HandleUserSelectionForNoCoupon(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal);
     }
 }

@@ -33,9 +33,11 @@ namespace GroceryStore.Business.Classes
         private int GetCouponIdForStrategy(ICouponStrategy strategy)
         {
             //Change this to fetching Enum
+            
             if (strategy is FlatDiscountCouponStrategy) return 1;
             if (strategy is BogoFreeCouponStrategy) return 3;
-                                                                     
+            if (strategy is NoCouponStrategy) return 0;
+
             throw new InvalidOperationException("Unknown coupon strategy.");
         }
     }
