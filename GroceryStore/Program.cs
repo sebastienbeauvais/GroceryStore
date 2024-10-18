@@ -27,9 +27,8 @@ namespace Program
             services.AddScoped<GroceryStore.Presentation.GroceryStore, GroceryStore.Presentation.GroceryStore>();
             services.AddScoped<IStoreManager, StoreManager>();
             services.AddScoped<ICouponProcessor, CouponProcessor>(); //Update to use interface
-            services.AddScoped<ICouponStrategy, FlatDiscountCouponStrategy>();
+            services.AddScoped<ICouponStrategy, TenOffDiscountCouponStrategy>();
             services.AddScoped<ICouponStrategy, BogoFreeCouponStrategy>();
-            services.AddScoped<ICouponStrategy, NoCouponStrategy>();
             services.AddScoped<ICashRegister, CashRegister>();
             services.AddScoped<IShoppingCart, ShoppingCart>();
             services.AddScoped<ICouponHandler, CouponHandler>();

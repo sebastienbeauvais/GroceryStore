@@ -17,7 +17,7 @@ namespace GroceryStore.Business.Classes
             if (selectedCoupon != null && _couponStrategies.ContainsKey(couponId))
             {
                 var strategy = _couponStrategies[couponId];
-                return strategy.ApplyCoupon(shoppingCart, shoppingCartTotal, selectedCoupon);
+                shoppingCartTotal = strategy.ApplyCoupon(shoppingCart, shoppingCartTotal, selectedCoupon);
                 // For more coupon strategies we would just need to create a new strategy class + add it to the GetCouponIdForStrategy (below)
                 // This breaks Open-Closed principal for GetCouponIdForStrategy
             }
@@ -34,9 +34,8 @@ namespace GroceryStore.Business.Classes
         {
             //Change this to fetching Enum
             
-            if (strategy is FlatDiscountCouponStrategy) return 1;
-            if (strategy is BogoFreeCouponStrategy) return 3;
-            if (strategy is NoCouponStrategy) return 0;
+            if (strategy is TenOffDiscountCouponStrategy) return 1;
+            if (strategy is BogoFreeCouponStrategy) return 2;
 
             throw new InvalidOperationException("Unknown coupon strategy.");
         }

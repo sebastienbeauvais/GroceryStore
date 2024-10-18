@@ -8,7 +8,7 @@ using GroceryStore.Models;
 
 namespace GroceryStore.Business.Classes
 {
-    public class FlatDiscountCouponStrategy : ICouponStrategy
+    public class TenOffDiscountCouponStrategy : ICouponStrategy
     {
         public double ApplyCoupon(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal, Coupon coupon)
         {
