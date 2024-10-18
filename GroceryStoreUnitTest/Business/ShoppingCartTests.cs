@@ -1,4 +1,4 @@
-namespace GroceryStoreUnitTest
+namespace GroceryStoreUnitTest.Business
 {
     [TestClass]
     public class ShoppingCartTests

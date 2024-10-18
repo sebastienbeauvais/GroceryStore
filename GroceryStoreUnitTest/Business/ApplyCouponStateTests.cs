@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using GroceryStoreUnitTest.Data;
 
-namespace GroceryStoreUnitTest
+namespace GroceryStoreUnitTest.Business
 {
     [TestClass]
     public class ApplyCouponStateTests

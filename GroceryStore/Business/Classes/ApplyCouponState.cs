@@ -25,5 +25,9 @@ namespace GroceryStore.Business.Classes
             var couponId = Convert.ToInt32(Console.ReadLine());
             return _couponProcessor.ApplyCoupon(couponId, shoppingCart, _availableCoupons, shoppingCartTotal);
         }
+        public double HandleUserSelectionForNoCoupon(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal)
+        {
+            return _couponProcessor.ApplyCoupon(0, shoppingCart, _availableCoupons, shoppingCartTotal);
+        }
     }
 }

@@ -4,7 +4,7 @@ using GroceryStore.Models;
 using System.Collections.Generic;
 using GroceryStoreUnitTest.Data;
 
-namespace GroceryStoreUnitTest
+namespace GroceryStoreUnitTest.Business
 {
     [TestClass]
     public class BogoFreeCouponStrategyTests

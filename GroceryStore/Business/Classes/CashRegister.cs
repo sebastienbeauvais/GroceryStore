@@ -16,7 +16,7 @@ namespace GroceryStore.Business.Classes
             var newCartTotal = _couponHandler.HandleUserSelection(shoppingCart, shoppingCartTotal);
             Console.WriteLine($"Thank you for shopping with us. Your total was ${newCartTotal}");
             Console.WriteLine($"And you saved: ${shoppingCartTotal - newCartTotal}");
-            Environment.Exit(0);
+            //Environment.Exit(0);
         }
     }
 }

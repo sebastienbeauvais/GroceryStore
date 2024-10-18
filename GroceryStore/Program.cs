@@ -14,6 +14,7 @@ namespace Program
 
             var storeManager = serviceProvider.GetRequiredService<GroceryStore.Presentation.GroceryStore>();
 
+            
             storeManager.EnterStore();
         }
 
@@ -28,6 +29,7 @@ namespace Program
             services.AddScoped<ICouponProcessor, CouponProcessor>(); //Update to use interface
             services.AddScoped<ICouponStrategy, FlatDiscountCouponStrategy>();
             services.AddScoped<ICouponStrategy, BogoFreeCouponStrategy>();
+            services.AddScoped<ICouponStrategy, NoCouponStrategy>();
             services.AddScoped<ICashRegister, CashRegister>();
             services.AddScoped<IShoppingCart, ShoppingCart>();
             services.AddScoped<ICouponHandler, CouponHandler>();

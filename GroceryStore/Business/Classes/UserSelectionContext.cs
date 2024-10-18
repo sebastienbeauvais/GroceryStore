@@ -26,5 +26,9 @@ namespace GroceryStore.Business.Classes
         {
             return currentState.HandleUserSelection(shoppingCart, shoppingCartTotal);
         }
+        public double HandleUserSelectionForNoCoupon(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal)
+        {
+            return currentState.HandleUserSelectionForNoCoupon(shoppingCart, shoppingCartTotal);
+        }
     }
 }
