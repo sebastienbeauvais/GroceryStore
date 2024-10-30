@@ -1,4 +1,5 @@
 ﻿using GroceryStore.Business.Interfaces;
+using GroceryStore.Models.Interfaces;
 using GroceryStore.Models;
 using System.Xml.Serialization;
 
@@ -8,8 +9,8 @@ namespace GroceryStore.Business.Classes
     {
         public ShoppingCart() { }
 
-        List<CartItem> shoppingCart = new List<CartItem>();
-        public void AddItemToShoppingCart(IEnumerable<StoreItem> storeInventory)
+        List<ICartItem> shoppingCart = new List<ICartItem>();
+        public void AddItemToShoppingCart(IEnumerable<IStoreItem> storeInventory)
         {
             Console.WriteLine("Please enter the ID of the item you would like to add: ");
             var cartItemToAdd = Convert.ToInt32(Console.ReadLine());
@@ -17,7 +18,7 @@ namespace GroceryStore.Business.Classes
             if (searchInventory != null)
             {
                 // Check if item is already in the cart
-                CartItem cartItem = shoppingCart.Find(x => x.Name == searchInventory.Name);
+                ICartItem cartItem = shoppingCart.Find(x => x.Name == searchInventory.Name);
                 if (cartItem != null)
                 {
                     cartItem.Quantity++;
@@ -28,7 +29,7 @@ namespace GroceryStore.Business.Classes
                 }
             }
         }
-        public void ShowItemsInShoppingCart(IEnumerable<StoreItem> storeInventory) 
+        public void ShowItemsInShoppingCart(IEnumerable<IStoreItem> storeInventory) 
         {
             var cartTotal = GetCartTotal(storeInventory, shoppingCart);
             
@@ -43,7 +44,7 @@ namespace GroceryStore.Business.Classes
         }
 
 
-        public double GetCartTotal(IEnumerable<StoreItem> storeInventory, IEnumerable<CartItem> shoppingCart)
+        public double GetCartTotal(IEnumerable<IStoreItem> storeInventory, IEnumerable<ICartItem> shoppingCart)
         {
             var cartTotal = 0.0;
             foreach (var cartItem in shoppingCart)
@@ -59,7 +60,7 @@ namespace GroceryStore.Business.Classes
             }
             return cartTotal;
         }
-        public IEnumerable<CartItem> GetShoppingCartItems()
+        public IEnumerable<ICartItem> GetShoppingCartItems()
         {
             return shoppingCart; 
         }

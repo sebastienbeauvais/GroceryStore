@@ -8,5 +8,9 @@ namespace GroceryStore.Models.Interfaces
 {
     public interface ICoupon
     {
+        int Id { get; set; }
+        string Name { get; set; }
+        string Description { get; set; }
+        double Discount { get; set; }
     }
 }

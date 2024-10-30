@@ -1,4 +1,4 @@
-﻿using GroceryStore.Models;
+﻿using GroceryStore.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace GroceryStore.Business.Interfaces
 {
     public interface ICouponProcessor
     {
-        public double ApplyCoupon(int couponId, IEnumerable<CartItem> shoppingCart, IEnumerable<Coupon> availableCoupons, double shoppingCartTotal);
-        public void ShowAvailableCoupons(IEnumerable<Coupon> availableCoupons);
+        public double ApplyCoupon(int couponId, IEnumerable<ICartItem> shoppingCart, IEnumerable<ICoupon> availableCoupons, double shoppingCartTotal);
+        public void ShowAvailableCoupons(IEnumerable<ICoupon> availableCoupons);
     }
 }

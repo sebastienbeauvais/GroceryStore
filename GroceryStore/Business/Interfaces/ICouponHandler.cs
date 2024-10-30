@@ -1,4 +1,4 @@
-﻿using GroceryStore.Models;
+﻿using GroceryStore.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,6 @@ namespace GroceryStore.Business.Interfaces
 {
     public interface ICouponHandler
     {
-        public double HandleUserSelection(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal);
+        public double HandleUserSelection(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal);
     }
 }

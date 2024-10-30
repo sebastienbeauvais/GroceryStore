@@ -8,5 +8,9 @@ namespace GroceryStore.Models.Interfaces
 {
     public interface ICartItem
     {
+        int Id { get; set; }
+        String? Name { get; set; }
+        int Quantity { get; set; }
+        double Price { get; set; }
     }
 }

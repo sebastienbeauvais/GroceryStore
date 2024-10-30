@@ -1,5 +1,5 @@
 ﻿using GroceryStore.Business.Interfaces;
-using GroceryStore.Models;
+using GroceryStore.Models.Interfaces;
 
 namespace GroceryStore.Business.Classes
 {
@@ -11,7 +11,7 @@ namespace GroceryStore.Business.Classes
             _couponHandler = couponHandler;
         }
 
-        public void Checkout(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal)
+        public void Checkout(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal)
         {
             var newCartTotal = _couponHandler.HandleUserSelection(shoppingCart, shoppingCartTotal);
             Console.WriteLine($"Thank you for shopping with us. Your total was ${newCartTotal}");
