@@ -15,7 +15,16 @@ namespace GroceryStoreUnitTest.Data
             {
                 new Coupon { Id = 1, Name = "10OFF", Description = "10 off total cart", Discount = 0.10 },
                 new Coupon { Id = 2, Name = "20OFF", Description = "20 off total cart", Discount = 0.20 },
-                new Coupon { Id = 3, Name = "BOGOFREE", Description = "Buy one get one free", Discount = 0.50 }
+                new Coupon { Id = 3, Name = "BOGOFREE", Description = "Buy one get one free", Discount = 1 }
+            };
+            return couponList;
+        }
+        public IEnumerable<Coupon> CreateTwoCouponList()
+        {
+            var couponList = new List<Coupon>
+            {
+                new Coupon { Id = 1, Name = "10OFF", Description = "10 off total cart", Discount = 0.10 },
+                new Coupon { Id = 2, Name = "BOGOFREE", Description = "Buy one get one free", Discount = 1 }
             };
             return couponList;
         }
@@ -46,6 +55,11 @@ namespace GroceryStoreUnitTest.Data
         public Coupon CreateBogoCoupon()
         {
             var coupon = new Coupon { Id = 3, Discount = 1 };
+            return coupon;
+        }
+        public Coupon CreateTenOffCoupon()
+        {
+            var coupon = new Coupon { Id = 1, Name = "10OFF", Description = "Applied 10% off your total cart", Discount = 0.1 };
             return coupon;
         }
     }
