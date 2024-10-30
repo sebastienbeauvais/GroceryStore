@@ -17,13 +17,13 @@ namespace GroceryStore.Business.Classes
             _couponProcessor = couponProcessor;
         }
 
-        private List<Coupon> availableCoupons = new List<Coupon>()
+        private List<ICoupon> availableCoupons = new List<ICoupon>()
         {
             new Coupon { Id = 1, Name = "10OFF", Description = "Applied 10% off your total cart", Discount = 0.1 },
             new Coupon { Id = 2, Name = "BOGOFree", Description = "Buy one item get one free", Discount = 1.0 },
         };
         
-        public double HandleUserSelection(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal)
+        public double HandleUserSelection(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal)
         {
             string userIn = string.Empty;
 

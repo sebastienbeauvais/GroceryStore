@@ -1,5 +1,5 @@
 ﻿using GroceryStore.Business.Interfaces;
-using GroceryStore.Models;
+using GroceryStore.Models.Interfaces;
 
 namespace GroceryStore.Business.Classes
 {
@@ -10,7 +10,7 @@ namespace GroceryStore.Business.Classes
         {
             _couponStrategies = couponStrategies.ToDictionary(x => GetCouponIdForStrategy(x), x => x);
         }
-        public double ApplyCoupon(int couponId, IEnumerable<CartItem> shoppingCart, IEnumerable<Coupon> availableCoupons, double shoppingCartTotal)
+        public double ApplyCoupon(int couponId, IEnumerable<ICartItem> shoppingCart, IEnumerable<ICoupon> availableCoupons, double shoppingCartTotal)
         {
             var selectedCoupon = availableCoupons.FirstOrDefault(x => x.Id == couponId);
 
@@ -23,7 +23,7 @@ namespace GroceryStore.Business.Classes
             }
             return shoppingCartTotal; // No valid coupon found
         }
-        public void ShowAvailableCoupons(IEnumerable<Coupon> availableCoupons)
+        public void ShowAvailableCoupons(IEnumerable<ICoupon> availableCoupons)
         {
             foreach (var coupon in availableCoupons)
             {

@@ -1,5 +1,5 @@
 ﻿using GroceryStore.Business.Interfaces;
-using GroceryStore.Models;
+using GroceryStore.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace GroceryStore.Business.Classes
 {
     public class BogoFreeCouponStrategy : ICouponStrategy
     {
-        public double ApplyCoupon(IEnumerable<CartItem> shoppingCart, double shoppingCartTotal, Coupon coupon)
+        public double ApplyCoupon(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal, ICoupon coupon)
         {
             double newCartTotal = 0;
             foreach (var item in shoppingCart)
