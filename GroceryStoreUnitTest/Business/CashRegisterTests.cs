@@ -20,8 +20,6 @@ namespace GroceryStoreUnitTest.Business
         {
             _mockCouponHandler = new Mock<ICouponHandler>();
             _testData = new TestData();
-
-            // Inject the mock into the CashRegister
             _cashRegister = new CashRegister(_mockCouponHandler.Object);
         }
         [TestMethod]

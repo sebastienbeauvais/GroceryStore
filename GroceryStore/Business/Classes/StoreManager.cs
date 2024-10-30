@@ -14,8 +14,6 @@ namespace GroceryStore.Business.Service
             _register = register;
             _shoppingCart = shoppingCart;
         }
-        /*IShoppingCart cart = new ShoppingCart();
-        ICashRegister register = new CashRegister();*/
 
         private List<StoreItem> storeInventoryDb = new List<StoreItem>() {
                 new StoreItem { Id = 1, Name = "Apple", Price = 0.50 },
