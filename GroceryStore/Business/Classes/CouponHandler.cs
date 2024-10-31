@@ -6,24 +6,20 @@ using System.Threading.Tasks;
 using GroceryStore.Business.Interfaces;
 using GroceryStore.Models;
 using GroceryStore.Models.Interfaces;
+using GroceryStore.Data.Interfaces;
 
 namespace GroceryStore.Business.Classes
 {
     public class CouponHandler : ICouponHandler
     {
         private ICouponProcessor _couponProcessor;
-        public CouponHandler(ICouponProcessor couponProcessor) 
+        private List<ICoupon> _couponDb;
+        public CouponHandler(ICouponProcessor couponProcessor, ICouponDb couponDb) 
         {
             _couponProcessor = couponProcessor;
+            _couponDb = couponDb.AvailableCoupons;
         }
-
-        private List<ICoupon> availableCoupons = new List<ICoupon>()
-        {
-            new Coupon { Id = 1, Name = "10OFF", Description = "Applied 10% off your total cart", Discount = 0.1 },
-            new Coupon { Id = 2, Name = "BOGOFree", Description = "Buy one item get one free", Discount = 1.0 },
-        };
-        
-        public double HandleUserSelection(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal)
+        public double HandleUserSelection(IShoppingCart shoppingCart)
         {
             string userIn = string.Empty;
 
@@ -33,21 +29,31 @@ namespace GroceryStore.Business.Classes
                 userIn = Console.ReadLine().ToUpper();
                 if (userIn == "Y")
                 {
-                    _couponProcessor.ShowAvailableCoupons(availableCoupons);
+                    _couponProcessor.ShowAvailableCoupons(_couponDb);
                     Console.WriteLine("Which coupon would you like to apply (enter ID): ");
                     var couponId = Convert.ToInt32(Console.ReadLine());
-                    shoppingCartTotal = _couponProcessor.ApplyCoupon(couponId, shoppingCart, availableCoupons, shoppingCartTotal);
+                    var couponDetails = GetCouponDetails(_couponDb, couponId);
+                    shoppingCart.coupon = couponDetails;
+                    //use a coupon helper class to get the coupon details
+                    // then we can set the shoppingCart.Coupon as an ICoupon instead of an int
+                    
+                    _couponProcessor.ApplyCoupon(shoppingCart);
                 }
                 else if (userIn == "N")
                 {
-                    return shoppingCartTotal;
+                    return shoppingCart.TotalPrice;
                 }
                 else
                 {
                     Console.WriteLine($"Sorry {userIn} is not a valid input. Please enter Y or N.");
                 }
             }
-            return shoppingCartTotal;
+            return shoppingCart.TotalPrice;
+        }
+        private ICoupon GetCouponDetails(List<ICoupon> couponDb, int couponId) 
+        {
+            var couponDetails = couponDb.Where(x => x.Id == couponId).First();
+            return couponDetails;
         }
     }
 }

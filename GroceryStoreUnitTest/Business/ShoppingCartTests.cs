@@ -11,13 +11,13 @@ namespace GroceryStoreUnitTest.Business
     [TestClass]
     public class ShoppingCartTests
     {
-        private ShoppingCart _shoppingCart;
+        private ShoppingCartHelper _shoppingCart;
         private List<StoreItem> _storeInventory;
 
         [TestInitialize]
         public void Setup()
         {
-            _shoppingCart = new ShoppingCart();
+            _shoppingCart = new ShoppingCartHelper();
             _storeInventory = new List<StoreItem>
             {
                 new StoreItem { Id = 1, Name = "Apple", Price = 1.0 },

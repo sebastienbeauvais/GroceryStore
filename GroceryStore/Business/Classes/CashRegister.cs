@@ -11,11 +11,11 @@ namespace GroceryStore.Business.Classes
             _couponHandler = couponHandler;
         }
 
-        public void Checkout(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal)
+        public void Checkout(IShoppingCart shoppingCart)
         {
-            var newCartTotal = _couponHandler.HandleUserSelection(shoppingCart, shoppingCartTotal);
+            var newCartTotal = _couponHandler.HandleUserSelection(shoppingCart);
             Console.WriteLine($"Thank you for shopping with us. Your total was ${newCartTotal}");
-            Console.WriteLine($"And you saved: ${shoppingCartTotal - newCartTotal}");
+            Console.WriteLine($"And you saved: ${shoppingCart.TotalPrice - newCartTotal}");
             //Environment.Exit(0);
         }
     }

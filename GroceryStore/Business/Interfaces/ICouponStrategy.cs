@@ -9,6 +9,7 @@ namespace GroceryStore.Business.Interfaces
 {
     public interface ICouponStrategy
     {
-        double ApplyCoupon(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal, ICoupon coupon);
+        double ApplyCoupon(IShoppingCart shoppingCart);
+        bool IsApplicable(ICoupon coupon);
     }
 }

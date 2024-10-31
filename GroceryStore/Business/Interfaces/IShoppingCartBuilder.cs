@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace GroceryStore.Business.Interfaces
 {
-    public interface ICouponHandler
+    public interface IShoppingCartBuilder
     {
-        public double HandleUserSelection(IShoppingCart shoppingCart);
+        IShoppingCart BuildShoppingCart(IEnumerable<ICartItem> shoppingCartItems);
     }
 }

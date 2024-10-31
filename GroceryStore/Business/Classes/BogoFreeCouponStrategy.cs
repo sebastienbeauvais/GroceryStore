@@ -10,14 +10,14 @@ namespace GroceryStore.Business.Classes
 {
     public class BogoFreeCouponStrategy : ICouponStrategy
     {
-        public double ApplyCoupon(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal, ICoupon coupon)
+        public double ApplyCoupon(IShoppingCart shoppingCart)
         {
             double newCartTotal = 0;
-            foreach (var item in shoppingCart)
+            foreach (var item in shoppingCart.Items)
             {
                 if (item.Quantity % 2 == 0)
                 {
-                    var discountItemPrice = (((item.Price * item.Quantity) * coupon.Discount) * 0.5);
+                    var discountItemPrice = (((item.Price * item.Quantity) * shoppingCart.coupon.Discount) * 0.5);
                     newCartTotal += discountItemPrice;
                 }
                 else if (item.Quantity > 2)
@@ -31,6 +31,10 @@ namespace GroceryStore.Business.Classes
                 }
             }
             return newCartTotal;
+        }
+        public bool IsApplicable(ICoupon coupon)
+        {
+            return coupon.Id == 2;
         }
     }
 }

@@ -10,10 +10,14 @@ namespace GroceryStore.Business.Classes
 {
     public class TenOffDiscountCouponStrategy : ICouponStrategy
     {
-        public double ApplyCoupon(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal, ICoupon coupon)
+        public double ApplyCoupon(IShoppingCart shoppingCart)
         {
             Console.WriteLine("Applying flat discount coupon...");
-            return shoppingCartTotal - (shoppingCartTotal * coupon.Discount);
+            return shoppingCart.TotalPrice - (shoppingCart.TotalPrice * shoppingCart.coupon.Discount);
+        }
+        public bool IsApplicable(ICoupon coupon)
+        {
+            return coupon.Id == 1;
         }
     }
 }

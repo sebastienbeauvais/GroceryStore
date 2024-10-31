@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroceryStore.Business.Interfaces
+namespace GroceryStore.Data.Interfaces
 {
-    public interface ICouponHandler
+    public interface IStoreInventoryDb
     {
-        public double HandleUserSelection(IShoppingCart shoppingCart);
+        List<IStoreItem> Inventory { get; }
     }
 }

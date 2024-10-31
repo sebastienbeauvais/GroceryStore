@@ -5,23 +5,27 @@ namespace GroceryStore.Business.Classes
 {
     public class CouponProcessor : ICouponProcessor
     {
-        private readonly IDictionary<int, ICouponStrategy> _couponStrategies;
+        private readonly IEnumerable<ICouponStrategy> _couponStrategies;
         public CouponProcessor(IEnumerable<ICouponStrategy> couponStrategies) 
         {
-            _couponStrategies = couponStrategies.ToDictionary(x => GetCouponIdForStrategy(x), x => x);
+            _couponStrategies = couponStrategies;
         }
-        public double ApplyCoupon(int couponId, IEnumerable<ICartItem> shoppingCart, IEnumerable<ICoupon> availableCoupons, double shoppingCartTotal)
+        public double ApplyCoupon(IShoppingCart shoppingCart)
         {
-            var selectedCoupon = availableCoupons.FirstOrDefault(x => x.Id == couponId);
+            //var selectedCoupon = availableCoupons.FirstOrDefault(x => x.Id == shoppingCart.coupon.Id);
 
-            if (selectedCoupon != null && _couponStrategies.ContainsKey(couponId))
+            if (shoppingCart.coupon != null)
             {
-                var strategy = _couponStrategies[couponId];
-                shoppingCartTotal = strategy.ApplyCoupon(shoppingCart, shoppingCartTotal, selectedCoupon);
-                // For more coupon strategies we would just need to create a new strategy class + add it to the GetCouponIdForStrategy (below)
-                // This breaks Open-Closed principal for GetCouponIdForStrategy
+                foreach (var strategy in _couponStrategies)
+                {
+                    if (strategy.IsApplicable(shoppingCart.coupon))
+                    {
+                        shoppingCart.TotalPrice = strategy.ApplyCoupon(shoppingCart);
+                        break;
+                    }
+                }
             }
-            return shoppingCartTotal; // No valid coupon found
+            return shoppingCart.TotalPrice;
         }
         public void ShowAvailableCoupons(IEnumerable<ICoupon> availableCoupons)
         {

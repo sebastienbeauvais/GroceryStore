@@ -2,6 +2,8 @@
 using GroceryStore.Business.Interfaces;
 using GroceryStore.Models;
 using GroceryStore.Models.Interfaces;
+using GroceryStore.Data;
+using GroceryStore.Data.Interfaces;
 
 
 namespace GroceryStore.Business.Service
@@ -9,33 +11,17 @@ namespace GroceryStore.Business.Service
     public class StoreManager : IStoreManager
     {
         private ICashRegister _register;
-        private IShoppingCart _shoppingCart;
-        public StoreManager(ICashRegister register, IShoppingCart shoppingCart) 
+        private IShoppingCartHelper _shoppingCartHelper;
+        private List<IStoreItem> _storeDb;
+        private IShoppingCartBuilder _shoppingCartBuilder;
+        public StoreManager(ICashRegister register, IShoppingCartHelper shoppingCartHelper, IStoreInventoryDb storeDb, IShoppingCartBuilder shoppingCartBuilder) 
         {
             _register = register;
-            _shoppingCart = shoppingCart;
+            _shoppingCartHelper = shoppingCartHelper;
+            _storeDb = storeDb.Inventory;
+            _shoppingCartBuilder = shoppingCartBuilder;
         }
 
-        private List<IStoreItem> storeInventoryDb = new List<IStoreItem>() {
-            new StoreItem { Id = 1, Name = "Apple", Price = 0.50 },
-            new StoreItem { Id = 2, Name = "Banana", Price = 0.20 },
-            new StoreItem { Id = 3, Name = "Carrot", Price = 0.10 },
-            new StoreItem { Id = 4, Name = "Tomato", Price = 0.30 },
-            new StoreItem { Id = 5, Name = "Milk", Price = 1.50 },
-            new StoreItem { Id = 6, Name = "White Bread", Price = 3.00 },
-            new StoreItem { Id = 7, Name = "Whole Wheat Bread", Price = 3.50 },
-            new StoreItem { Id = 8, Name = "Eggs (12)", Price = 7.99 },
-            new StoreItem { Id = 9, Name = "Eggs (6)", Price = 4.50 },
-            new StoreItem { Id = 10, Name = "Coffee Beans", Price = 3.39 },
-            new StoreItem { Id = 11, Name = "Brown Sugar", Price = 4.59 },
-            new StoreItem { Id = 12, Name = "Oatmeal", Price = 5.99 },
-            new StoreItem { Id = 13, Name = "Peanut Butter", Price = 2.50 },
-            new StoreItem { Id = 14, Name = "Oat Milk", Price = 4.50 },
-            new StoreItem { Id = 15, Name = "Cheddar Cheese", Price = 4.49 },
-            new StoreItem { Id = 16, Name = "Salmon", Price = 15.99 },
-            new StoreItem { Id = 17, Name = "Chicken", Price = 12.99 },
-            new StoreItem { Id = 18, Name = "Wagyu Beed", Price = 105.99 }
-        };
         private void DisplayInventory(IEnumerable<IStoreItem> inventory)
         {
             foreach (var item in inventory)
@@ -53,23 +39,25 @@ namespace GroceryStore.Business.Service
             Console.WriteLine("4. Checkout");
             Console.WriteLine("5. Leave store");
         }
+
         public void HandleUserInput(string userInput)
         {            
             switch (userInput)
             {
                 case "1":
-                    DisplayInventory(storeInventoryDb);
+                    DisplayInventory(_storeDb);
                     break;
                 case "2":
-                    _shoppingCart.AddItemToShoppingCart(storeInventoryDb);
+                    _shoppingCartHelper.AddItemToShoppingCart(_storeDb);
                     break;
                 case "3":
-                    _shoppingCart.ShowItemsInShoppingCart(storeInventoryDb);
+                    _shoppingCartHelper.ShowItemsInShoppingCart(_storeDb);
                     break;
                 case "4":
-                    //TODO - checkout
-                    var shoppingCart = _shoppingCart.GetShoppingCartItems();
-                    _register.Checkout(shoppingCart, _shoppingCart.GetCartTotal(storeInventoryDb, shoppingCart));
+                    var shoppingCartItems = _shoppingCartHelper.GetShoppingCartItems();
+                    var shoppingCart = _shoppingCartBuilder.BuildShoppingCart(shoppingCartItems);
+
+                    _register.Checkout(shoppingCart);//shoppingCartItems, _shoppingCart.GetCartTotal(_storeDb, shoppingCartItems)); //Then pass shoppingCart by itself into this
                     break;
             }
         }

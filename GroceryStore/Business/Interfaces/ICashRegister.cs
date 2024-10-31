@@ -4,6 +4,6 @@ namespace GroceryStore.Business.Interfaces
 {
     public interface ICashRegister
     {
-        public void Checkout(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal);
+        public void Checkout(IShoppingCart shoppingCart);
     }
 }
