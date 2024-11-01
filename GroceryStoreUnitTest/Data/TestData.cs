@@ -31,13 +31,19 @@ namespace GroceryStoreUnitTest.Data
             };
             return couponList;
         }
-        public List<CartItem> CreateGeneralShoppingCartList()
+        public IShoppingCart CreateGeneralShoppingCart()
         {
-            var cartItemList = new List<CartItem>
+            IShoppingCart shoppingCart = new ShoppingCart
             {
-                new CartItem { Id = 1, Name = "TestItem1", Quantity = 1, Price = 10.0 },
+                Items = new List<ICartItem>
+                {
+                    new CartItem { Id = 1, Name = "TestItem1", Quantity = 1, Price = 10.0 },
+                },
+                TotalPrice = 10.0,
+                coupon = new Coupon { Id = 1, Discount = 0.1 }
             };
-            return cartItemList;
+
+            return shoppingCart;
         }
         public IShoppingCart CreateCartForBogoDiscountShoppingCart_EvenQuantity()
         {

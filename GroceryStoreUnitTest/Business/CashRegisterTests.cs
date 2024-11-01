@@ -22,19 +22,17 @@ namespace GroceryStoreUnitTest.Business
             _testData = new TestData();
             _cashRegister = new CashRegister(_mockCouponHandler.Object);
         }
-        /*[TestMethod]
+        [TestMethod]
         public void CheckoutAppliesCouponCorrectly()
         {
-            var shoppingCart = _testData.CreateGeneralShoppingCartList();
-            double shoppingCartTotal = 20.0;
-            double expectedNewTotal = 15.0;
+            var shoppingCart = _testData.CreateGenericShoppingCart_OneItem_SingleQuantity();
 
-            _mockCouponHandler.Setup(handler => handler.HandleUserSelection(shoppingCart, shoppingCartTotal))
-                              .Returns(expectedNewTotal);
+            _mockCouponHandler.Setup(handler => handler.HandleUserSelection(shoppingCart))
+                              .Returns(shoppingCart.TotalPrice);
 
-            _cashRegister.Checkout(shoppingCart, shoppingCartTotal);
+            _cashRegister.Checkout(shoppingCart);
 
-            _mockCouponHandler.Verify(handler => handler.HandleUserSelection(shoppingCart, shoppingCartTotal), Times.Once);
-        }*/
+            _mockCouponHandler.Verify(handler => handler.HandleUserSelection(shoppingCart), Times.Once);
+        }
     }
 }
