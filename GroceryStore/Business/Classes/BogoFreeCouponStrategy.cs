@@ -17,7 +17,7 @@ namespace GroceryStore.Business.Classes
             {
                 if (item.Quantity % 2 == 0)
                 {
-                    var discountItemPrice = (((item.Price * item.Quantity) * shoppingCart.coupon.Discount) * 0.5);
+                    var discountItemPrice = ((item.Price * item.Quantity) * shoppingCart.coupon.Discount);
                     newCartTotal += discountItemPrice;
                 }
                 else if (item.Quantity > 2)

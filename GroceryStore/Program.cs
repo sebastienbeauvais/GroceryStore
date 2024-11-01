@@ -37,6 +37,7 @@ namespace Program
             services.AddSingleton<IStoreInventoryDb, StoreInventoryDb>();
             services.AddSingleton<ICouponDb, CouponDb>();
             services.AddScoped<IShoppingCartBuilder, ShoppingCartBuilder>();
+            services.AddScoped<ICouponHandlerHelper, CouponHandlerHelper>();
 
             return services.BuildServiceProvider();
         }

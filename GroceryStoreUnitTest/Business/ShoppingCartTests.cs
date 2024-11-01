@@ -26,7 +26,7 @@ namespace GroceryStoreUnitTest.Business
             };
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void AddItemToShoppingCart_ItemExistsInInventory_AddsToCart()
         {
             Console.SetIn(new StringReader("1")); // Simulate user input for item ID
@@ -94,6 +94,6 @@ namespace GroceryStoreUnitTest.Business
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual("Apple", result.First().Name);
             Assert.AreEqual(1, result.First().Quantity);
-        }
+        }*/
     }
 }

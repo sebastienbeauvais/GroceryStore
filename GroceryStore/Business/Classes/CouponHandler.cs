@@ -14,10 +14,12 @@ namespace GroceryStore.Business.Classes
     {
         private ICouponProcessor _couponProcessor;
         private List<ICoupon> _couponDb;
-        public CouponHandler(ICouponProcessor couponProcessor, ICouponDb couponDb) 
+        private ICouponHandlerHelper _couponHandlerHelper;
+        public CouponHandler(ICouponProcessor couponProcessor, ICouponDb couponDb, ICouponHandlerHelper couponHandlerHelper)
         {
             _couponProcessor = couponProcessor;
             _couponDb = couponDb.AvailableCoupons;
+            _couponHandlerHelper = couponHandlerHelper;
         }
         public double HandleUserSelection(IShoppingCart shoppingCart)
         {
@@ -29,13 +31,11 @@ namespace GroceryStore.Business.Classes
                 userIn = Console.ReadLine().ToUpper();
                 if (userIn == "Y")
                 {
-                    _couponProcessor.ShowAvailableCoupons(_couponDb);
+                    _couponHandlerHelper.ShowAvailableCoupons(_couponDb);
                     Console.WriteLine("Which coupon would you like to apply (enter ID): ");
                     var couponId = Convert.ToInt32(Console.ReadLine());
-                    var couponDetails = GetCouponDetails(_couponDb, couponId);
+                    var couponDetails = _couponHandlerHelper.GetCouponDetails(_couponDb, couponId);
                     shoppingCart.coupon = couponDetails;
-                    //use a coupon helper class to get the coupon details
-                    // then we can set the shoppingCart.Coupon as an ICoupon instead of an int
                     
                     _couponProcessor.ApplyCoupon(shoppingCart);
                 }
@@ -49,11 +49,6 @@ namespace GroceryStore.Business.Classes
                 }
             }
             return shoppingCart.TotalPrice;
-        }
-        private ICoupon GetCouponDetails(List<ICoupon> couponDb, int couponId) 
-        {
-            var couponDetails = couponDb.Where(x => x.Id == couponId).First();
-            return couponDetails;
         }
     }
 }

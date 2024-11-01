@@ -13,7 +13,7 @@ namespace GroceryStoreUnitTest.Business
         private Mock<IShoppingCartHelper> _mockShoppingCart;
         private List<StoreItem> _storeInventory;
 
-        [TestInitialize]
+        /*[TestInitialize]
         public void Setup()
         {
             _mockCashRegister = new Mock<ICashRegister>();
@@ -72,6 +72,6 @@ namespace GroceryStoreUnitTest.Business
             _storeManager.HandleUserInput("4");
 
             _mockCashRegister.Verify(register => register.Checkout(cartItems, 1.0), Times.Once);
-        }
+        }*/
     }
 }

@@ -12,8 +12,6 @@ namespace GroceryStore.Business.Classes
         }
         public double ApplyCoupon(IShoppingCart shoppingCart)
         {
-            //var selectedCoupon = availableCoupons.FirstOrDefault(x => x.Id == shoppingCart.coupon.Id);
-
             if (shoppingCart.coupon != null)
             {
                 foreach (var strategy in _couponStrategies)
@@ -26,22 +24,6 @@ namespace GroceryStore.Business.Classes
                 }
             }
             return shoppingCart.TotalPrice;
-        }
-        public void ShowAvailableCoupons(IEnumerable<ICoupon> availableCoupons)
-        {
-            foreach (var coupon in availableCoupons)
-            {
-                Console.WriteLine($"{coupon.Id} - {coupon.Name}, {coupon.Description}");
-            }
-        }
-        private int GetCouponIdForStrategy(ICouponStrategy strategy)
-        {
-            //Change this to fetching Enum
-            
-            if (strategy is TenOffDiscountCouponStrategy) return 1;
-            if (strategy is BogoFreeCouponStrategy) return 2;
-
-            throw new InvalidOperationException("Unknown coupon strategy.");
         }
     }
 }

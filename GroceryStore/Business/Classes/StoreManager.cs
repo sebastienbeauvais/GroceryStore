@@ -57,7 +57,7 @@ namespace GroceryStore.Business.Service
                     var shoppingCartItems = _shoppingCartHelper.GetShoppingCartItems();
                     var shoppingCart = _shoppingCartBuilder.BuildShoppingCart(shoppingCartItems);
 
-                    _register.Checkout(shoppingCart);//shoppingCartItems, _shoppingCart.GetCartTotal(_storeDb, shoppingCartItems)); //Then pass shoppingCart by itself into this
+                    _register.Checkout(shoppingCart);
                     break;
             }
         }
