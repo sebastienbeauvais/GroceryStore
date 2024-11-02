@@ -9,6 +9,6 @@ namespace GroceryStore.Business.Interfaces
 {
     public interface IShoppingCartBuilder
     {
-        IShoppingCart BuildShoppingCart(IEnumerable<ICartItem> shoppingCartItems);
+        IShoppingCart BuildShoppingCart();
     }
 }

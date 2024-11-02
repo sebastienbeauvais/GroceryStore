@@ -13,13 +13,11 @@ namespace GroceryStore.Business.Service
         private ICashRegister _register;
         private IShoppingCartHelper _shoppingCartHelper;
         private List<IStoreItem> _storeDb;
-        private IShoppingCartBuilder _shoppingCartBuilder;
-        public StoreManager(ICashRegister register, IShoppingCartHelper shoppingCartHelper, IStoreInventoryDb storeDb, IShoppingCartBuilder shoppingCartBuilder) 
+        public StoreManager(ICashRegister register, IShoppingCartHelper shoppingCartHelper, IStoreInventoryDb storeDb) 
         {
             _register = register;
             _shoppingCartHelper = shoppingCartHelper;
             _storeDb = storeDb.Inventory;
-            _shoppingCartBuilder = shoppingCartBuilder;
         }
 
         private void DisplayInventory(IEnumerable<IStoreItem> inventory)
@@ -54,10 +52,10 @@ namespace GroceryStore.Business.Service
                     _shoppingCartHelper.ShowItemsInShoppingCart(_storeDb);
                     break;
                 case "4":
-                    var shoppingCartItems = _shoppingCartHelper.GetShoppingCartItems();
-                    var shoppingCart = _shoppingCartBuilder.BuildShoppingCart(shoppingCartItems);
+                    // One method in ShoppingCartHelper to do these two things
+                    // Actually lets build the cart in CashRegister
 
-                    _register.Checkout(shoppingCart);
+                    _register.Checkout(); //then it would jsut be shoppingCartHelper.GetCart
                     break;
             }
         }

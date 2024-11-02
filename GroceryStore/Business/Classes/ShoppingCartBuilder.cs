@@ -6,24 +6,26 @@ using System.Threading.Tasks;
 using GroceryStore.Business.Interfaces;
 using GroceryStore.Data.Interfaces;
 using GroceryStore.Models.Interfaces;
+using GroceryStore.Models;
 
 namespace GroceryStore.Business.Classes
 {
     public class ShoppingCartBuilder : IShoppingCartBuilder
     {
         private readonly List<IStoreItem> _storeInventory;
-        //private readonly List<ICartItem> _shoppingCartItems;
+        private IShoppingCartHelper _shoppingCartHelper;
 
-        public ShoppingCartBuilder(IStoreInventoryDb storeInventory)
+        public ShoppingCartBuilder(IStoreInventoryDb storeInventory, IShoppingCartHelper shoppingCartHelper)
         {
-            //_shoppingCartItems = shoppingCartItems;
             _storeInventory = storeInventory.Inventory;
+            _shoppingCartHelper = shoppingCartHelper;
         }
-        public IShoppingCart BuildShoppingCart(IEnumerable<ICartItem> shoppingCartItems)
+        public IShoppingCart BuildShoppingCart()
         {
+            IEnumerable<ICartItem> shoppingCart = _shoppingCartHelper.GetShoppingCartItems();
             double totalPrice = 0;
 
-            foreach (var cartItem in shoppingCartItems)
+            foreach (var cartItem in shoppingCart)
             {
                 var storeItem = _storeInventory.FirstOrDefault(i => i.Name == cartItem.Name);
                 if (storeItem != null)
@@ -34,7 +36,7 @@ namespace GroceryStore.Business.Classes
 
             return new ShoppingCart
             {
-                Items = shoppingCartItems,
+                Items = shoppingCart,
                 TotalPrice = totalPrice
             };
         }

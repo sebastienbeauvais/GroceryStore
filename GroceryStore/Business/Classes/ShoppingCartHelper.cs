@@ -7,7 +7,7 @@ namespace GroceryStore.Business.Classes
 {
     public class ShoppingCartHelper : IShoppingCartHelper
     {
-        public ShoppingCartHelper() { }
+        public ShoppingCartHelper() { } //here we would have a builder. We could all a attrubute for Cart {get;} -> would do line 57+58 on storeManager
 
         List<ICartItem> shoppingCart = new List<ICartItem>();
         public void AddItemToShoppingCart(IEnumerable<IStoreItem> storeInventory)

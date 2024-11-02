@@ -31,11 +31,19 @@ namespace GroceryStore.Business.Classes
                 userIn = Console.ReadLine().ToUpper();
                 if (userIn == "Y")
                 {
+                    // An idea: you are accepting the id of a coupon from User In.
+                    // Use the id to get the details
+                    // Then set on the shopping cart and we apply the coupon
+                    // What if the super market becomes huge and DB of coupons becomes huge
+                    // Now Apply Coupon goes over every strategy
+                    // This is a scaling problem
+                    // What we can see: On the coupon Handler -> when they type in coupon 2 
+                        // Instead of getting details return the strategy and return that so when we 
+                        // priocess the cart we already are ready to go
                     _couponHandlerHelper.ShowAvailableCoupons(_couponDb);
                     Console.WriteLine("Which coupon would you like to apply (enter ID): ");
                     var couponId = Convert.ToInt32(Console.ReadLine());
-                    var couponDetails = _couponHandlerHelper.GetCouponDetails(_couponDb, couponId);
-                    shoppingCart.coupon = couponDetails;
+                    shoppingCart.coupon = _couponHandlerHelper.GetCouponDetails(_couponDb, couponId);
                     
                     _couponProcessor.ApplyCoupon(shoppingCart);
                 }
