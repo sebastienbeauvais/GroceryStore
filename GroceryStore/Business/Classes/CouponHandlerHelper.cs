@@ -12,13 +12,16 @@ namespace GroceryStore.Business.Classes
     public class CouponHandlerHelper : ICouponHandlerHelper
     {
         private List<ICoupon> _couponDb;
-        public CouponHandlerHelper(ICouponDb couponDb) 
+        private IEnumerable<ICouponStrategy> _couponStrategies;
+        public CouponHandlerHelper(ICouponDb couponDb, IEnumerable<ICouponStrategy> couponStrategies) 
         {
             _couponDb = couponDb.AvailableCoupons;
+            _couponStrategies = couponStrategies;
         }
-        public ICoupon GetCouponDetails(List<ICoupon> couponDb, int couponId)
+        public ICoupon GetCouponDetails(int couponId)
         {
-            var couponDetails = couponDb.Where(x => x.Id == couponId).First();
+            var couponDetails = _couponDb.Where(x => x.Id == couponId).First();
+            couponDetails.CouponStrategy = GetCouponStrategyForSelectedCoupon(couponDetails);
             return couponDetails;
         }
         public void ShowAvailableCoupons(IEnumerable<ICoupon> availableCoupons)
@@ -27,6 +30,10 @@ namespace GroceryStore.Business.Classes
             {
                 Console.WriteLine($"{coupon.Id} - {coupon.Name}, {coupon.Description}");
             }
+        }
+        private ICouponStrategy GetCouponStrategyForSelectedCoupon(ICoupon coupon)
+        {
+            return _couponStrategies.FirstOrDefault(s => s.IsApplicable(coupon));
         }
     }
 }

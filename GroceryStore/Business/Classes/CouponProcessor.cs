@@ -5,23 +5,12 @@ namespace GroceryStore.Business.Classes
 {
     public class CouponProcessor : ICouponProcessor
     {
-        private readonly IEnumerable<ICouponStrategy> _couponStrategies;
-        public CouponProcessor(IEnumerable<ICouponStrategy> couponStrategies) 
-        {
-            _couponStrategies = couponStrategies;
-        }
+        public CouponProcessor() { }
         public double ApplyCoupon(IShoppingCart shoppingCart)
         {
-            if (shoppingCart.coupon != null)
+            if (shoppingCart.coupon != null && shoppingCart.coupon.CouponStrategy != null)
             {
-                foreach (var strategy in _couponStrategies)
-                {
-                    if (strategy.IsApplicable(shoppingCart.coupon))
-                    {
-                        shoppingCart.TotalPrice = strategy.ApplyCoupon(shoppingCart);
-                        break;
-                    }
-                }
+                shoppingCart.TotalPrice = shoppingCart.coupon.CouponStrategy.ApplyCoupon(shoppingCart);
             }
             return shoppingCart.TotalPrice;
         }

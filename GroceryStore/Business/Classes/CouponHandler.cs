@@ -35,7 +35,7 @@ namespace GroceryStore.Business.Classes
                     _couponHandlerHelper.ShowAvailableCoupons(_couponDb);
                     Console.WriteLine("Which coupon would you like to apply (enter ID): ");
                     var couponId = Convert.ToInt32(Console.ReadLine());
-                    shoppingCart.coupon = _couponHandlerHelper.GetCouponDetails(_couponDb, couponId); //I don tthink we even need to add CouponDb as a param
+                    shoppingCart.coupon = _couponHandlerHelper.GetCouponDetails(couponId);
                     
                     _couponProcessor.ApplyCoupon(shoppingCart);
                 }

@@ -4,7 +4,7 @@ namespace GroceryStore.Business.Interfaces
 {
     public interface ICouponHandlerHelper
     {
-        public ICoupon GetCouponDetails(List<ICoupon> couponDb, int couponId);
+        public ICoupon GetCouponDetails(int couponId);
         public void ShowAvailableCoupons(IEnumerable<ICoupon> availableCoupons);
     }
 }
