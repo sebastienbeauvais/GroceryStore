@@ -52,10 +52,7 @@ namespace GroceryStore.Business.Service
                     _shoppingCartHelper.ShowItemsInShoppingCart(_storeDb);
                     break;
                 case "4":
-                    // One method in ShoppingCartHelper to do these two things
-                    // Actually lets build the cart in CashRegister
-
-                    _register.Checkout(); //then it would jsut be shoppingCartHelper.GetCart
+                    _register.Checkout();
                     break;
             }
         }
