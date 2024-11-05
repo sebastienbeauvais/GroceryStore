@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GroceryStore.Business.Classes;
 using GroceryStore.Models;
+using GroceryStore.Models.Interfaces;
 
 namespace GroceryStoreUnitTest.Data
 {
@@ -28,29 +30,61 @@ namespace GroceryStoreUnitTest.Data
             };
             return couponList;
         }
-        public List<CartItem> CreateGeneralShoppingCartList()
+        public IShoppingCart CreateGeneralShoppingCart()
         {
-            var cartItemList = new List<CartItem>
+            IShoppingCart shoppingCart = new ShoppingCart
             {
-                new CartItem { Id = 1, Name = "TestItem1", Quantity = 1, Price = 10.0 },
+                Items = new List<ICartItem>
+                {
+                    new CartItem { Id = 1, Name = "TestItem1", Quantity = 1, Price = 10.0 },
+                },
+                TotalPrice = 10.0,
+                coupon = new Coupon { Id = 1, Discount = 0.1 }
             };
-            return cartItemList;
+
+            return shoppingCart;
         }
-        public List<CartItem> CreateCartForBogoDiscountEvenQuantity()
+        public IShoppingCart CreateCartForBogoDiscountShoppingCart_EvenQuantity()
         {
-            var cartItemList = new List<CartItem>
+            IShoppingCart shoppingCart = new ShoppingCart
             {
-                new CartItem { Id = 1, Name = "TestItem1", Quantity = 2, Price = 10.0 },
+                Items = new List<ICartItem>
+                {
+                    new CartItem { Id = 1, Name = "TestItem1", Quantity = 2, Price = 10.0 },
+                },
+                TotalPrice = 20.0,
+                coupon = new Coupon { Id = 2, Discount = 0.5 }
             };
-            return cartItemList;
+            
+            return shoppingCart;
         }
-        public List<CartItem> CreateCartForBogoDiscountOddQuantity()
+        public IShoppingCart CreateCartForBogoDiscountShoppingCart_OddQuantity()
         {
-            var cartItemList = new List<CartItem>
+            IShoppingCart shoppingCart = new ShoppingCart
             {
-                new CartItem { Id = 1, Name = "TestItem1", Quantity = 3, Price = 10.0 },
+                Items = new List<ICartItem>
+                {
+                    new CartItem { Id = 1, Name = "TestItem1", Quantity = 3, Price = 10.0 },
+                },
+                TotalPrice = 30.0,
+                coupon = new Coupon { Id = 2, Discount = 0.5 }
             };
-            return cartItemList;
+
+            return shoppingCart;
+        }
+        public IShoppingCart CreateGenericShoppingCart_OneItem_SingleQuantity()
+        {
+            IShoppingCart shoppingCart = new ShoppingCart
+            {
+                Items = new List<ICartItem>
+                {
+                    new CartItem { Id = 1, Name = "TestItem1", Quantity = 1, Price = 10.0 },
+                },
+                TotalPrice = 10.0,
+                coupon = new Coupon { Id = 2, Discount = 0.5 }
+            };
+
+            return shoppingCart;
         }
         public Coupon CreateBogoCoupon()
         {

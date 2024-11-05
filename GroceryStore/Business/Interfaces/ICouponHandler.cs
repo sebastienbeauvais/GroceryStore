@@ -9,6 +9,6 @@ namespace GroceryStore.Business.Interfaces
 {
     public interface ICouponHandler
     {
-        public double HandleUserSelection(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal);
+        public double HandleUserSelection(IShoppingCart shoppingCart);
     }
 }

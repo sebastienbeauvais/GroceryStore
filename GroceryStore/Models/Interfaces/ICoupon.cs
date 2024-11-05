@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroceryStore.Business.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,6 @@ namespace GroceryStore.Models.Interfaces
         string Name { get; set; }
         string Description { get; set; }
         double Discount { get; set; }
+        ICouponStrategy? CouponStrategy { get; set; }
     }
 }

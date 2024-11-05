@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace GroceryStore.Business.Interfaces
 {
-    public interface ICouponProcessor
+    public interface IShoppingCartBuilder
     {
-        public double ApplyCoupon(IShoppingCart shoppingCart);
+        IShoppingCart BuildShoppingCart();
     }
 }

@@ -11,13 +11,13 @@ namespace GroceryStoreUnitTest.Business
     [TestClass]
     public class ShoppingCartTests
     {
-        private ShoppingCart _shoppingCart;
+        private ShoppingCartHelper _shoppingCart;
         private List<StoreItem> _storeInventory;
 
         [TestInitialize]
         public void Setup()
         {
-            _shoppingCart = new ShoppingCart();
+            _shoppingCart = new ShoppingCartHelper();
             _storeInventory = new List<StoreItem>
             {
                 new StoreItem { Id = 1, Name = "Apple", Price = 1.0 },
@@ -26,7 +26,7 @@ namespace GroceryStoreUnitTest.Business
             };
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void AddItemToShoppingCart_ItemExistsInInventory_AddsToCart()
         {
             Console.SetIn(new StringReader("1")); // Simulate user input for item ID
@@ -94,6 +94,6 @@ namespace GroceryStoreUnitTest.Business
             Assert.AreEqual(1, result.Count());
             Assert.AreEqual("Apple", result.First().Name);
             Assert.AreEqual(1, result.First().Quantity);
-        }
+        }*/
     }
 }

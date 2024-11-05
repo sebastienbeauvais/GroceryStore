@@ -1,7 +1,8 @@
 ﻿using GroceryStore.Business.Classes;
 using GroceryStore.Business.Interfaces;
 using GroceryStore.Business.Service;
-using GroceryStore.Presentation;
+using GroceryStore.Data;
+using GroceryStore.Data.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Program
@@ -26,12 +27,15 @@ namespace Program
             // Register services
             services.AddScoped<GroceryStore.Presentation.GroceryStore, GroceryStore.Presentation.GroceryStore>();
             services.AddScoped<IStoreManager, StoreManager>();
-            services.AddScoped<ICouponProcessor, CouponProcessor>(); //Update to use interface
+            services.AddScoped<ICouponProcessor, CouponProcessor>();
             services.AddScoped<ICouponStrategy, TenOffDiscountCouponStrategy>();
             services.AddScoped<ICouponStrategy, BogoFreeCouponStrategy>();
             services.AddScoped<ICashRegister, CashRegister>();
-            services.AddScoped<IShoppingCart, ShoppingCart>();
+            services.AddScoped<IShoppingCartHandler, ShoppingCartHandler>();
             services.AddScoped<ICouponHandler, CouponHandler>();
+            services.AddSingleton<IStoreInventoryDb, StoreInventoryDb>();
+            services.AddSingleton<ICouponDb, CouponDb>();
+            services.AddScoped<IShoppingCartBuilder, ShoppingCartBuilder>();
 
             return services.BuildServiceProvider();
         }

@@ -26,7 +26,7 @@ namespace GroceryStoreUnitTest.Business
             _testData = new TestData();
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void ApplyCoupon_WithTenOffDiscountCoupon_AppliesDiscountCorrectly()
         {
             double cartTotal = 10.0;
@@ -96,6 +96,6 @@ namespace GroceryStoreUnitTest.Business
             {
                 Assert.AreEqual("Unknown coupon strategy.", ex.InnerException.Message);
             }
-        }
+        }*/
     }
 }

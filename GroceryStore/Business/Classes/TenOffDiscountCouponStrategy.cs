@@ -1,19 +1,18 @@
 ﻿using GroceryStore.Business.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GroceryStore.Models.Interfaces;
 
 namespace GroceryStore.Business.Classes
 {
     public class TenOffDiscountCouponStrategy : ICouponStrategy
     {
-        public double ApplyCoupon(IEnumerable<ICartItem> shoppingCart, double shoppingCartTotal, ICoupon coupon)
+        public double ApplyCoupon(IShoppingCart shoppingCart)
         {
             Console.WriteLine("Applying flat discount coupon...");
-            return shoppingCartTotal - (shoppingCartTotal * coupon.Discount);
+            return shoppingCart.TotalPrice - (shoppingCart.TotalPrice * shoppingCart.coupon.Discount);
+        }
+        public bool IsApplicable(ICoupon coupon)
+        {
+            return coupon.Id == 1;
         }
     }
 }
