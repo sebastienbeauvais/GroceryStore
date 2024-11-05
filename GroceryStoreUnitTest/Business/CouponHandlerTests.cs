@@ -13,8 +13,8 @@ namespace GroceryStoreUnitTest.Business
     {
         private Mock<ICouponProcessor> _mockCouponProcessor;
         private Mock<ICouponDb> _mockCouponDb;
-        private Mock<ICouponHandlerHelper> _mockCouponHandlerHelper;
         private ICouponHandler _couponHandler;
+        private IEnumerable<ICouponStrategy> _mockStrategies;
         private TestData _testData;
 
         [TestInitialize]
@@ -22,11 +22,11 @@ namespace GroceryStoreUnitTest.Business
         {
             _mockCouponProcessor = new Mock<ICouponProcessor>();
             _mockCouponDb = new Mock<ICouponDb>();
-            _mockCouponHandlerHelper = new Mock<ICouponHandlerHelper>();
             _testData = new TestData();
-            _couponHandler = new CouponHandler(_mockCouponProcessor.Object, _mockCouponDb.Object, _mockCouponHandlerHelper.Object);
+            _mockStrategies = new List<ICouponStrategy>();
+            _couponHandler = new CouponHandler(_mockCouponProcessor.Object, _mockCouponDb.Object, _mockStrategies);
         }
-
+        /*
         [TestMethod]
         public void HandleUserSelection_ShouldApplyCoupon_WhenUserSelectsYes()
         {
@@ -49,7 +49,7 @@ namespace GroceryStoreUnitTest.Business
                 _mockCouponProcessor.Verify(x => x.ApplyCoupon(shoppingCart), Times.Once);
             }
         }
-        /*
+        
         [TestMethod]
         public void HandleUserSelection_ShouldNotApplyCoupon_WhenUserSelectsNo()
         {

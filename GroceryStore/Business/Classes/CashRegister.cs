@@ -17,7 +17,6 @@ namespace GroceryStore.Business.Classes
             var shoppingCart = _shoppingCartBuilder.BuildShoppingCart();
             _couponHandler.HandleUserSelection(shoppingCart);
             Console.WriteLine($"Thank you for shopping with us. Your total was ${shoppingCart.TotalPrice}");
-            //Environment.Exit(0);
         }
     }
 }

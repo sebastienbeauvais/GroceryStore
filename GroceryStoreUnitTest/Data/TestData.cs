@@ -86,6 +86,19 @@ namespace GroceryStoreUnitTest.Data
 
             return shoppingCart;
         }
+        public IShoppingCart CreateGenericShoppingCart_NoCoupon()
+        {
+            IShoppingCart shoppingCart = new ShoppingCart
+            {
+                Items = new List<ICartItem>
+                {
+                    new CartItem { Id = 1, Name = "TestItem1", Quantity = 1, Price = 10.0 },
+                },
+                TotalPrice = 10.0,
+            };
+
+            return shoppingCart;
+        }
         public Coupon CreateBogoCoupon()
         {
             var coupon = new Coupon { Id = 3, Discount = 1 };

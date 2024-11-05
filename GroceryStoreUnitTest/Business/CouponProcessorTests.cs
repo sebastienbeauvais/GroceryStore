@@ -22,7 +22,7 @@ namespace GroceryStoreUnitTest.Business
             var bogoFreeStrategy = new BogoFreeCouponStrategy();
 
             var strategies = new List<ICouponStrategy> { tenOffDiscountStrategy, bogoFreeStrategy };
-            _couponProcessor = new CouponProcessor(strategies);
+            _couponProcessor = new CouponProcessor();
             _testData = new TestData();
         }
 

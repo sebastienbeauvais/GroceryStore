@@ -1,10 +1,8 @@
 using GroceryStore.Business.Classes;
 using GroceryStore.Business.Interfaces;
-using GroceryStore.Models;
+using GroceryStore.Models.Interfaces;
 using GroceryStoreUnitTest.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Collections.Generic;
 
 namespace GroceryStoreUnitTest.Business
 {
@@ -12,6 +10,8 @@ namespace GroceryStoreUnitTest.Business
     public class CashRegisterTests
     {
         private Mock<ICouponHandler> _mockCouponHandler;
+        private Mock<IShoppingCartBuilder> _mockShoppingCartBuilder;
+        private Mock<IShoppingCart> _mockShoppingCart;
         private CashRegister _cashRegister;
         private TestData _testData;
 
@@ -19,18 +19,20 @@ namespace GroceryStoreUnitTest.Business
         public void Setup()
         {
             _mockCouponHandler = new Mock<ICouponHandler>();
+            _mockShoppingCartBuilder = new Mock<IShoppingCartBuilder>();
+            _cashRegister = new CashRegister(_mockCouponHandler.Object, _mockShoppingCartBuilder.Object);
             _testData = new TestData();
-            _cashRegister = new CashRegister(_mockCouponHandler.Object);
         }
         [TestMethod]
-        public void CheckoutAppliesCouponCorrectly()
+        public void CheckoutReturnsCartTotalInMessage()
         {
-            var shoppingCart = _testData.CreateGenericShoppingCart_OneItem_SingleQuantity();
+            var shoppingCart = _testData.CreateGenericShoppingCart_NoCoupon();
 
             _mockCouponHandler.Setup(handler => handler.HandleUserSelection(shoppingCart))
                               .Returns(shoppingCart.TotalPrice);
+            _mockShoppingCartBuilder.Setup(cart => cart.BuildShoppingCart()).Returns(shoppingCart);
 
-            _cashRegister.Checkout(shoppingCart);
+            _cashRegister.Checkout();
 
             _mockCouponHandler.Verify(handler => handler.HandleUserSelection(shoppingCart), Times.Once);
         }

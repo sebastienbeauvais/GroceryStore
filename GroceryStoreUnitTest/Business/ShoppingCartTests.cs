@@ -1,4 +1,6 @@
+using GroceryStore.Business.Interfaces;
 using GroceryStore.Business.Classes;
+using GroceryStore.Data.Interfaces;
 using GroceryStore.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -11,19 +13,19 @@ namespace GroceryStoreUnitTest.Business
     [TestClass]
     public class ShoppingCartTests
     {
-        private ShoppingCartHelper _shoppingCart;
-        private List<StoreItem> _storeInventory;
+        private IShoppingCartHandler _shoppingCartHandler;
+        private IStoreInventoryDb _storeInventory;
 
         [TestInitialize]
         public void Setup()
         {
-            _shoppingCart = new ShoppingCartHelper();
-            _storeInventory = new List<StoreItem>
+            _shoppingCartHandler = new ShoppingCartHandler(_storeInventory);
+            /*_storeInventory = new List<StoreItem>
             {
                 new StoreItem { Id = 1, Name = "Apple", Price = 1.0 },
                 new StoreItem { Id = 2, Name = "Banana", Price = 0.5 },
                 new StoreItem { Id = 3, Name = "Orange", Price = 0.75 }
-            };
+            };*/
         }
 
         /*[TestMethod]
