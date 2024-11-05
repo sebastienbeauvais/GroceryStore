@@ -1,8 +1,5 @@
-﻿using GroceryStore.Business.Classes;
-using GroceryStore.Business.Interfaces;
-using GroceryStore.Models;
+﻿using GroceryStore.Business.Interfaces;
 using GroceryStore.Models.Interfaces;
-using GroceryStore.Data;
 using GroceryStore.Data.Interfaces;
 
 
@@ -19,15 +16,6 @@ namespace GroceryStore.Business.Service
             _shoppingCartHandler = shoppingCartHandler;
             _storeDb = storeDb.Inventory;
         }
-
-        private void DisplayInventory(IEnumerable<IStoreItem> inventory)
-        {
-            foreach (var item in inventory)
-            {
-                Console.WriteLine($"{item.Id}. {item.Name} - ${item.Price:F2}");
-            }
-        }
-
         public void ShowStoreMenu()
         {
             Console.WriteLine();
@@ -43,7 +31,7 @@ namespace GroceryStore.Business.Service
             switch (userInput)
             {
                 case "1":
-                    DisplayInventory(_storeDb);
+                    DisplayInventory();
                     break;
                 case "2":
                     _shoppingCartHandler.AddItemToShoppingCart();
@@ -54,6 +42,13 @@ namespace GroceryStore.Business.Service
                 case "4":
                     _register.Checkout();
                     break;
+            }
+        }
+        private void DisplayInventory()
+        {
+            foreach (var item in _storeDb)
+            {
+                Console.WriteLine($"{item.Id}. {item.Name} - ${item.Price:F2}");
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using GroceryStore.Business.Interfaces;
-using GroceryStore.Models.Interfaces;
 
 namespace GroceryStore.Business.Classes
 {

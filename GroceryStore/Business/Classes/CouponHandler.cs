@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GroceryStore.Business.Interfaces;
-using GroceryStore.Models;
+﻿using GroceryStore.Business.Interfaces;
 using GroceryStore.Models.Interfaces;
 using GroceryStore.Data.Interfaces;
 
@@ -29,9 +23,9 @@ namespace GroceryStore.Business.Classes
             {
                 Console.WriteLine("\nApply a coupon? (Y/N)");
                 userIn = Console.ReadLine().ToUpper();
+
                 if (userIn == "Y")
                 {
-                    
                     ShowAvailableCoupons();
                     Console.WriteLine("Which coupon would you like to apply (enter ID): ");
                     var couponId = Convert.ToInt32(Console.ReadLine());
@@ -49,15 +43,6 @@ namespace GroceryStore.Business.Classes
                 }
             }
             return shoppingCart.TotalPrice;
-            // An idea: you are accepting the id of a coupon from User In.
-            // Use the id to get the details
-            // Then set on the shopping cart and we apply the coupon
-            // What if the super market becomes huge and DB of coupons becomes huge
-            // Now Apply Coupon goes over every strategy
-            // This is a scaling problem
-            // What we can see: On the coupon Handler -> when they type in coupon 2 
-            // Instead of getting details return the strategy and return that so when we 
-            // process the cart we already are ready to go
         }
         private void ShowAvailableCoupons()
         {

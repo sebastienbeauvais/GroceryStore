@@ -3,7 +3,6 @@ using GroceryStore.Business.Interfaces;
 using GroceryStore.Business.Service;
 using GroceryStore.Data;
 using GroceryStore.Data.Interfaces;
-using GroceryStore.Presentation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Program
