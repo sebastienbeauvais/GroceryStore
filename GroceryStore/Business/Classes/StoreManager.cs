@@ -11,12 +11,12 @@ namespace GroceryStore.Business.Service
     public class StoreManager : IStoreManager
     {
         private ICashRegister _register;
-        private IShoppingCartHelper _shoppingCartHelper;
+        private IShoppingCartHandler _shoppingCartHandler;
         private List<IStoreItem> _storeDb;
-        public StoreManager(ICashRegister register, IShoppingCartHelper shoppingCartHelper, IStoreInventoryDb storeDb) 
+        public StoreManager(ICashRegister register, IShoppingCartHandler shoppingCartHandler, IStoreInventoryDb storeDb) 
         {
             _register = register;
-            _shoppingCartHelper = shoppingCartHelper;
+            _shoppingCartHandler = shoppingCartHandler;
             _storeDb = storeDb.Inventory;
         }
 
@@ -46,10 +46,10 @@ namespace GroceryStore.Business.Service
                     DisplayInventory(_storeDb);
                     break;
                 case "2":
-                    _shoppingCartHelper.AddItemToShoppingCart(_storeDb);
+                    _shoppingCartHandler.AddItemToShoppingCart();
                     break;
                 case "3":
-                    _shoppingCartHelper.ShowItemsInShoppingCart(_storeDb);
+                    _shoppingCartHandler.ShowItemsInShoppingCart();
                     break;
                 case "4":
                     _register.Checkout();

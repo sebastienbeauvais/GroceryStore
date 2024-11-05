@@ -14,12 +14,12 @@ namespace GroceryStore.Business.Classes
     {
         private ICouponProcessor _couponProcessor;
         private List<ICoupon> _couponDb;
-        private ICouponHandlerHelper _couponHandlerHelper;
-        public CouponHandler(ICouponProcessor couponProcessor, ICouponDb couponDb, ICouponHandlerHelper couponHandlerHelper)
+        private IEnumerable<ICouponStrategy> _couponStrategies;
+        public CouponHandler(ICouponProcessor couponProcessor, ICouponDb couponDb, IEnumerable<ICouponStrategy> couponStratgies)
         {
             _couponProcessor = couponProcessor;
             _couponDb = couponDb.AvailableCoupons;
-            _couponHandlerHelper = couponHandlerHelper;
+            _couponStrategies = couponStratgies;
         }
         public double HandleUserSelection(IShoppingCart shoppingCart)
         {
@@ -32,10 +32,10 @@ namespace GroceryStore.Business.Classes
                 if (userIn == "Y")
                 {
                     
-                    _couponHandlerHelper.ShowAvailableCoupons(_couponDb);
+                    ShowAvailableCoupons();
                     Console.WriteLine("Which coupon would you like to apply (enter ID): ");
                     var couponId = Convert.ToInt32(Console.ReadLine());
-                    shoppingCart.coupon = _couponHandlerHelper.GetCouponDetails(couponId);
+                    shoppingCart.coupon = GetCouponDetails(couponId);
                     
                     _couponProcessor.ApplyCoupon(shoppingCart);
                 }
@@ -58,6 +58,24 @@ namespace GroceryStore.Business.Classes
             // What we can see: On the coupon Handler -> when they type in coupon 2 
             // Instead of getting details return the strategy and return that so when we 
             // process the cart we already are ready to go
+        }
+        private void ShowAvailableCoupons()
+        {
+            foreach (var coupon in _couponDb)
+            {
+                Console.WriteLine($"{coupon.Id} - {coupon.Name}, {coupon.Description}");
+            }
+        }
+        private ICoupon GetCouponDetails(int couponId)
+        {
+            var couponDetails = _couponDb.Where(x => x.Id == couponId).First();
+            couponDetails.CouponStrategy = GetCouponStrategyForSelectedCoupon(couponDetails);
+            return couponDetails;
+        }
+        private ICouponStrategy GetCouponStrategyForSelectedCoupon(ICoupon coupon)
+        {
+            //add try catch here
+            return _couponStrategies.First(s => s.IsApplicable(coupon));
         }
     }
 }

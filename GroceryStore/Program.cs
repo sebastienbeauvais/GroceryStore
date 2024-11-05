@@ -32,12 +32,11 @@ namespace Program
             services.AddScoped<ICouponStrategy, TenOffDiscountCouponStrategy>();
             services.AddScoped<ICouponStrategy, BogoFreeCouponStrategy>();
             services.AddScoped<ICashRegister, CashRegister>();
-            services.AddScoped<IShoppingCartHelper, ShoppingCartHelper>();
+            services.AddScoped<IShoppingCartHandler, ShoppingCartHandler>();
             services.AddScoped<ICouponHandler, CouponHandler>();
             services.AddSingleton<IStoreInventoryDb, StoreInventoryDb>();
             services.AddSingleton<ICouponDb, CouponDb>();
             services.AddScoped<IShoppingCartBuilder, ShoppingCartBuilder>();
-            services.AddScoped<ICouponHandlerHelper, CouponHandlerHelper>();
 
             return services.BuildServiceProvider();
         }

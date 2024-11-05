@@ -2,19 +2,24 @@
 using GroceryStore.Models.Interfaces;
 using GroceryStore.Models;
 using System.Xml.Serialization;
+using GroceryStore.Data.Interfaces;
 
 namespace GroceryStore.Business.Classes
 {
-    public class ShoppingCartHelper : IShoppingCartHelper
+    public class ShoppingCartHandler : IShoppingCartHandler
     {
-        public ShoppingCartHelper() { } //here we would have a builder. We could all a attrubute for Cart {get;} -> would do line 57+58 on storeManager
+        private IEnumerable<IStoreItem> _storeDb;
+        public ShoppingCartHandler(IStoreInventoryDb storeDb) 
+        {
+            _storeDb = storeDb.Inventory;
+        }
 
         List<ICartItem> shoppingCart = new List<ICartItem>();
-        public void AddItemToShoppingCart(IEnumerable<IStoreItem> storeInventory)
+        public void AddItemToShoppingCart()
         {
             Console.WriteLine("Please enter the ID of the item you would like to add: ");
             var cartItemToAdd = Convert.ToInt32(Console.ReadLine());
-            var searchInventory = storeInventory.ToList().Find(x => x.Id == cartItemToAdd);
+            var searchInventory = _storeDb.ToList().Find(x => x.Id == cartItemToAdd);
             if (searchInventory != null)
             {
                 // Check if item is already in the cart
@@ -29,37 +34,16 @@ namespace GroceryStore.Business.Classes
                 }
             }
         }
-        public void ShowItemsInShoppingCart(IEnumerable<IStoreItem> storeInventory) 
-        {
-            var cartTotal = GetCartTotal(storeInventory, shoppingCart);
-            
-
+        public void ShowItemsInShoppingCart() 
+        {            
             Console.WriteLine("-------- YOUR SHOPPING CART ---------");
             foreach (var item in shoppingCart)
             {
                 Console.WriteLine($"{item.Name} - Quantity: {item.Quantity}");
             }
             Console.WriteLine("-------------------------------------");
-            Console.WriteLine($"Total: {cartTotal}");
         }
 
-
-        public double GetCartTotal(IEnumerable<IStoreItem> storeInventory, IEnumerable<ICartItem> shoppingCart)
-        {
-            var cartTotal = 0.0;
-            foreach (var cartItem in shoppingCart)
-            {
-                var itemName = cartItem.Name;
-                var itemQuantity = cartItem.Quantity;
-                var matchingItem = storeInventory.FirstOrDefault(x => x.Name == itemName);
-                if (matchingItem != null)
-                {
-                    cartTotal += matchingItem.Price * itemQuantity;
-                    cartItem.Price = matchingItem.Price;
-                }
-            }
-            return cartTotal;
-        }
         public List<ICartItem> GetShoppingCartItems()
         {
             return shoppingCart; 

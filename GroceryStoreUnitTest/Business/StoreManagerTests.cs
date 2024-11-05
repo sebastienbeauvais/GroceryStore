@@ -10,7 +10,7 @@ namespace GroceryStoreUnitTest.Business
     {
         private StoreManager _storeManager;
         private Mock<ICashRegister> _mockCashRegister;
-        private Mock<IShoppingCartHelper> _mockShoppingCart;
+        private Mock<IShoppingCartHandler> _mockShoppingCart;
         private List<StoreItem> _storeInventory;
 
         /*[TestInitialize]

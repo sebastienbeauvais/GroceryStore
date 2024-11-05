@@ -13,16 +13,16 @@ namespace GroceryStore.Business.Classes
     public class ShoppingCartBuilder : IShoppingCartBuilder
     {
         private readonly List<IStoreItem> _storeInventory;
-        private IShoppingCartHelper _shoppingCartHelper;
+        private IShoppingCartHandler _shoppingCartHandler;
 
-        public ShoppingCartBuilder(IStoreInventoryDb storeInventory, IShoppingCartHelper shoppingCartHelper)
+        public ShoppingCartBuilder(IStoreInventoryDb storeInventory, IShoppingCartHandler shoppingCartHandler)
         {
             _storeInventory = storeInventory.Inventory;
-            _shoppingCartHelper = shoppingCartHelper;
+            _shoppingCartHandler = shoppingCartHandler;
         }
         public IShoppingCart BuildShoppingCart()
         {
-            IEnumerable<ICartItem> shoppingCart = _shoppingCartHelper.GetShoppingCartItems();
+            IEnumerable<ICartItem> shoppingCart = _shoppingCartHandler.GetShoppingCartItems();
             double totalPrice = 0;
 
             foreach (var cartItem in shoppingCart)
