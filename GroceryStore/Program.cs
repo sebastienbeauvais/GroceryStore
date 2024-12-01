@@ -30,6 +30,7 @@ namespace Program
             services.AddScoped<ICouponProcessor, CouponProcessor>();
             services.AddScoped<ICouponStrategy, TenOffDiscountCouponStrategy>();
             services.AddScoped<ICouponStrategy, BogoFreeCouponStrategy>();
+            services.AddScoped<ICouponStrategy, FreeShippingDiscountCouponStrategy>();
             services.AddScoped<ICashRegister, CashRegister>();
             services.AddScoped<IShoppingCartHandler, ShoppingCartHandler>();
             services.AddScoped<ICouponHandler, CouponHandler>();

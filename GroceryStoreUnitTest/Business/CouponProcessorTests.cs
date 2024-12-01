@@ -1,101 +1,86 @@
 using GroceryStore.Business.Classes;
 using GroceryStore.Business.Interfaces;
-using GroceryStore.Models;
+using GroceryStore.Models.Interfaces;
 using Moq;
-using GroceryStoreUnitTest.Data;
-using System.Reflection;
 
-namespace GroceryStoreUnitTest.Business
+namespace BusinessTests
 {
     [TestClass]
     public class CouponProcessorTests
     {
         private CouponProcessor _couponProcessor;
-        private Mock<ICouponStrategy> _tenOffDiscountStrategy;
-        private Mock<ICouponStrategy> _bogoFreeStrategy;
-        private TestData _testData;
+        private Mock<IShoppingCart> _mockShoppingCart;
+        private Mock<ICoupon> _mockCoupon;
+        private Mock<ICouponStrategy> _mockCouponStrategy;
 
         [TestInitialize]
         public void Setup()
         {
-            var tenOffDiscountStrategy = new TenOffDiscountCouponStrategy();
-            var bogoFreeStrategy = new BogoFreeCouponStrategy();
-
-            var strategies = new List<ICouponStrategy> { tenOffDiscountStrategy, bogoFreeStrategy };
-            _couponProcessor = new CouponProcessor(strategies);
-            _testData = new TestData();
-        }
-
-        /*[TestMethod]
-        public void ApplyCoupon_WithTenOffDiscountCoupon_AppliesDiscountCorrectly()
-        {
-            double cartTotal = 10.0;
-            int couponId = 1;
-            IEnumerable<Coupon> _availableCoupons = _testData.CreateTwoCouponList();
-            List<CartItem> _shoppingCart = _testData.CreateGeneralShoppingCartList();
-
-            var result = _couponProcessor.ApplyCoupon(couponId, _shoppingCart, _availableCoupons, cartTotal);
-
-            Assert.AreEqual(9.0, result);
+            _couponProcessor = new CouponProcessor();
+            _mockShoppingCart = new Mock<IShoppingCart>();
+            _mockCoupon = new Mock<ICoupon>();
+            _mockCouponStrategy = new Mock<ICouponStrategy>();
         }
 
         [TestMethod]
-        public void ApplyCoupon_WithBogoFreeCoupon_AppliesDiscountCorrectly()
+        public void ApplyCoupon_ShouldNotChangeTotalPrice_WhenNoCouponIsApplied()
         {
-            double cartTotal = 20.0;
-            int couponId = 2;
-            IEnumerable<Coupon> _availableCoupons = _testData.CreateTwoCouponList();
-            List<CartItem> _shoppingCart = _testData.CreateCartForBogoDiscountEvenQuantity();
+            _mockShoppingCart.Setup(cart => cart.coupon).Returns((ICoupon)null);
+            _mockShoppingCart.SetupProperty(cart => cart.TotalPrice, 100.0);
 
-            var result = _couponProcessor.ApplyCoupon(couponId, _shoppingCart, _availableCoupons, cartTotal);
+            var result = _couponProcessor.ApplyCoupon(_mockShoppingCart.Object);
 
-            Assert.AreEqual(10.0, result);
+            Assert.AreEqual(100.0, result);
+            _mockShoppingCart.Verify(cart => cart.coupon, Times.Once);
         }
 
         [TestMethod]
-        public void ApplyCoupon_WithInvalidCouponId_ReturnsOriginalTotal()
+        public void ApplyCoupon_ShouldNotChangeTotalPrice_WhenCouponHasNoStrategy()
         {
-            double cartTotal = 100.0;
-            int invalidCouponId = 99;
-            IEnumerable<Coupon> _availableCoupons = _testData.CreateCouponList();
-            List<CartItem> _shoppingCart = _testData.CreateGeneralShoppingCartList();
+            _mockCoupon.Setup(coupon => coupon.CouponStrategy).Returns((ICouponStrategy)null);
+            _mockShoppingCart.Setup(cart => cart.coupon).Returns(_mockCoupon.Object);
+            _mockShoppingCart.SetupProperty(cart => cart.TotalPrice, 100.0);
 
-            var result = _couponProcessor.ApplyCoupon(invalidCouponId, _shoppingCart, _availableCoupons, cartTotal);
+            var result = _couponProcessor.ApplyCoupon(_mockShoppingCart.Object);
 
-            Assert.AreEqual(cartTotal, result);
+            Assert.AreEqual(100.0, result);
+            _mockShoppingCart.Verify(cart => cart.coupon, Times.AtLeastOnce);
         }
 
         [TestMethod]
-        public void ShowAvailableCoupons_DisplaysCorrectInformation()
+        public void ApplyCoupon_ShouldChangeTotalPrice_WhenValidCouponStrategyIsApplied()
         {
-            IEnumerable<Coupon> _availableCoupons = _testData.CreateTwoCouponList();
-            var consoleOutput = new System.IO.StringWriter();
-            Console.SetOut(consoleOutput);
+            _mockCouponStrategy
+                .Setup(strategy => strategy.ApplyCoupon(It.IsAny<IShoppingCart>()))
+                .Returns(50.0);
 
-            _couponProcessor.ShowAvailableCoupons(_availableCoupons);
+            _mockCoupon.Setup(coupon => coupon.CouponStrategy).Returns(_mockCouponStrategy.Object);
+            _mockShoppingCart.Setup(cart => cart.coupon).Returns(_mockCoupon.Object);
+            _mockShoppingCart.SetupProperty(cart => cart.TotalPrice, 100.0);
 
-            var output = consoleOutput.ToString();
-            Assert.IsTrue(output.Contains("1 - 10OFF, 10 off total cart"));
-            Assert.IsTrue(output.Contains("2 - BOGOFREE, Buy one get one free"));
+            var result = _couponProcessor.ApplyCoupon(_mockShoppingCart.Object);
+
+            Assert.AreEqual(50.0, result);
+            _mockShoppingCart.Verify(cart => cart.coupon, Times.AtLeastOnce);
+            _mockCouponStrategy.Verify(strategy => strategy.ApplyCoupon(_mockShoppingCart.Object), Times.AtLeastOnce);
         }
 
         [TestMethod]
-        public void GetCouponIdForStrategy_WithUnknownStrategy_ThrowsException()
+        public void ApplyCoupon_ShouldRetainOriginalTotalPrice_WhenStrategyDoesNotChangePrice()
         {
-            var unknownStrategy = new Mock<ICouponStrategy>().Object;
+            _mockCouponStrategy
+                .Setup(strategy => strategy.ApplyCoupon(It.IsAny<IShoppingCart>()))
+                .Returns(100.0);
 
-            var result = typeof(CouponProcessor)
-                .GetMethod("GetCouponIdForStrategy", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            _mockCoupon.Setup(coupon => coupon.CouponStrategy).Returns(_mockCouponStrategy.Object);
+            _mockShoppingCart.Setup(cart => cart.coupon).Returns(_mockCoupon.Object);
+            _mockShoppingCart.SetupProperty(cart => cart.TotalPrice, 100.0);
 
-            try
-            {
-                result.Invoke(_couponProcessor, new object[] { unknownStrategy });
-                Assert.Fail("Expected InvalidOperationException was not thrown.");
-            }
-            catch (TargetInvocationException ex)
-            {
-                Assert.AreEqual("Unknown coupon strategy.", ex.InnerException.Message);
-            }
-        }*/
+            var result = _couponProcessor.ApplyCoupon(_mockShoppingCart.Object);
+
+            Assert.AreEqual(100.0, result);
+            _mockShoppingCart.Verify(cart => cart.coupon, Times.AtLeastOnce);
+            _mockCouponStrategy.Verify(strategy => strategy.ApplyCoupon(_mockShoppingCart.Object), Times.AtLeastOnce);
+        }
     }
 }

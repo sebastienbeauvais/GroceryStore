@@ -1,38 +1,76 @@
 using GroceryStore.Business.Classes;
 using GroceryStore.Business.Interfaces;
 using GroceryStore.Models;
-using GroceryStoreUnitTest.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Collections.Generic;
+using System;
 
-namespace GroceryStoreUnitTest.Business
+namespace BusinessTests
 {
     [TestClass]
     public class CashRegisterTests
     {
         private Mock<ICouponHandler> _mockCouponHandler;
+        private Mock<IShoppingCartBuilder> _mockShoppingCartBuilder;
         private CashRegister _cashRegister;
-        private TestData _testData;
 
         [TestInitialize]
         public void Setup()
         {
             _mockCouponHandler = new Mock<ICouponHandler>();
-            _testData = new TestData();
-            _cashRegister = new CashRegister(_mockCouponHandler.Object);
+            _mockShoppingCartBuilder = new Mock<IShoppingCartBuilder>();
+            _cashRegister = new CashRegister(_mockCouponHandler.Object, _mockShoppingCartBuilder.Object);
         }
+
         [TestMethod]
-        public void CheckoutAppliesCouponCorrectly()
+        public void Checkout_ShouldInvokeShoppingCartBuilderAndCouponHandler()
         {
-            var shoppingCart = _testData.CreateGenericShoppingCart_OneItem_SingleQuantity();
+            var shoppingCart = new ShoppingCart { TotalPrice = 100 };
+            _mockShoppingCartBuilder
+                .Setup(builder => builder.BuildShoppingCart())
+                .Returns(shoppingCart);
 
-            _mockCouponHandler.Setup(handler => handler.HandleUserSelection(shoppingCart))
-                              .Returns(shoppingCart.TotalPrice);
+            _cashRegister.Checkout();
 
-            _cashRegister.Checkout(shoppingCart);
-
+            _mockShoppingCartBuilder.Verify(builder => builder.BuildShoppingCart(), Times.Once);
             _mockCouponHandler.Verify(handler => handler.HandleUserSelection(shoppingCart), Times.Once);
+        }
+
+        [TestMethod]
+        public void Checkout_ShouldPrintTotalPrice()
+        {
+            var shoppingCart = new ShoppingCart { TotalPrice = 50.75 };
+            _mockShoppingCartBuilder
+                .Setup(builder => builder.BuildShoppingCart())
+                .Returns(shoppingCart);
+
+            using var consoleOutput = new ConsoleOutputCapture();
+
+            _cashRegister.Checkout();
+
+            var output = consoleOutput.GetOutput();
+            Assert.IsTrue(output.Contains($"Thank you for shopping with us. Your total was ${shoppingCart.TotalPrice}"));
+        }
+    }
+
+    public class ConsoleOutputCapture : IDisposable
+    {
+        private readonly StringWriter _stringWriter;
+        private readonly TextWriter _originalOutput;
+
+        public ConsoleOutputCapture()
+        {
+            _stringWriter = new StringWriter();
+            _originalOutput = Console.Out;
+            Console.SetOut(_stringWriter);
+        }
+
+        public string GetOutput() => _stringWriter.ToString();
+
+        public void Dispose()
+        {
+            Console.SetOut(_originalOutput);
+            _stringWriter.Dispose();
         }
     }
 }

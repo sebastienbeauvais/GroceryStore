@@ -6,7 +6,7 @@ using GroceryStore.Models;
 namespace BusinessTests
 {
     [TestClass]
-    public class TenOffDiscountCouponStrategyTests
+    public class FreeShippingCouponStrategyTests
     {
         private ICouponStrategy _couponStrategy;
         private IShoppingCart _shoppingCart;
@@ -15,8 +15,8 @@ namespace BusinessTests
         [TestInitialize]
         public void Setup()
         {
-            _couponStrategy = new TenOffDiscountCouponStrategy();
-            _coupon = new Coupon { Id = 1, Name = "10OFF", Description = "10% off", Discount = 0.1 }; // 10% discount
+            _couponStrategy = new FreeShippingDiscountCouponStrategy();
+            _coupon = new Coupon { Id = 3, Name = "FreeShpping", Description = "Free shipping on shopping cart", Discount = 5.0 };
             _shoppingCart = new ShoppingCart { TotalPrice = 100.0, coupon = _coupon };
         }
 
@@ -25,7 +25,7 @@ namespace BusinessTests
         {
             var newTotalPrice = _couponStrategy.ApplyCoupon(_shoppingCart);
 
-            var expectedTotalPrice = 90.0;
+            var expectedTotalPrice = 95.0;
             Assert.AreEqual(expectedTotalPrice, newTotalPrice);
         }
 
@@ -38,7 +38,7 @@ namespace BusinessTests
         }
 
         [TestMethod]
-        public void IsApplicable_ShouldReturnFalse_WhenCouponIdIsNot1()
+        public void IsApplicable_ShouldReturnFalse_WhenCouponIdIsNot3()
         {
             _coupon.Id = 2;
 

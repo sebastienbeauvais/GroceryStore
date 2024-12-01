@@ -1,7 +1,6 @@
 ﻿using GroceryStore.Business.Interfaces;
 using GroceryStore.Models.Interfaces;
 using GroceryStore.Models;
-using System.Xml.Serialization;
 using GroceryStore.Data.Interfaces;
 
 namespace GroceryStore.Business.Classes

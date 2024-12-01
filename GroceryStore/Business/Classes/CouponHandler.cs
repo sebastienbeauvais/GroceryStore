@@ -30,7 +30,7 @@ namespace GroceryStore.Business.Classes
                     Console.WriteLine("Which coupon would you like to apply (enter ID): ");
                     var couponId = Convert.ToInt32(Console.ReadLine());
                     shoppingCart.coupon = GetCouponDetails(couponId);
-                    
+                    //decorator pattern - tailor made for this processing
                     _couponProcessor.ApplyCoupon(shoppingCart);
                 }
                 else if (userIn == "N")
