@@ -1,92 +1,83 @@
 using GroceryStore.Business.Classes;
 using GroceryStore.Business.Interfaces;
-using GroceryStore.Models;
-using Moq;
-using GroceryStoreUnitTest.HelperClasses;
-using GroceryStoreUnitTest.Data;
+using GroceryStore.Data;
 using GroceryStore.Data.Interfaces;
+using GroceryStore.Models.Interfaces;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace GroceryStoreUnitTest.Business
+namespace BusinessTests
 {
     [TestClass]
     public class CouponHandlerTests
     {
         private Mock<ICouponProcessor> _mockCouponProcessor;
-        private Mock<ICouponDb> _mockCouponDb;
-        private Mock<ICouponHandlerHelper> _mockCouponHandlerHelper;
-        private ICouponHandler _couponHandler;
-        private TestData _testData;
+        private CouponDb _couponDb;
+        private Mock<IShoppingCart> _mockShoppingCart;
+        private List<Mock<ICouponStrategy>> _mockCouponStrategies;
+        private CouponHandler _couponHandler;
 
         [TestInitialize]
         public void Setup()
         {
             _mockCouponProcessor = new Mock<ICouponProcessor>();
-            _mockCouponDb = new Mock<ICouponDb>();
-            _mockCouponHandlerHelper = new Mock<ICouponHandlerHelper>();
-            _testData = new TestData();
-            _couponHandler = new CouponHandler(_mockCouponProcessor.Object, _mockCouponDb.Object, _mockCouponHandlerHelper.Object);
+            _couponDb = new CouponDb();
+            _mockShoppingCart = new Mock<IShoppingCart>();
+
+            var mockStrategy1 = new Mock<ICouponStrategy>();
+            var mockStrategy2 = new Mock<ICouponStrategy>();
+            _mockCouponStrategies = new List<Mock<ICouponStrategy>> { mockStrategy1, mockStrategy2 };
+
+            _couponHandler = new CouponHandler(
+                _mockCouponProcessor.Object,
+                _couponDb,
+                _mockCouponStrategies.Select(s => s.Object)
+            );
         }
 
         [TestMethod]
-        public void HandleUserSelection_ShouldApplyCoupon_WhenUserSelectsYes()
+        public void HandleUserSelection_ShouldReturnTotalPrice_WhenUserDeclinesCoupon()
         {
-            // Arrange
-            var shoppingCart = _testData.CreateGeneralShoppingCart();
-            double discountedTotal = 9.0;
-            var shoppingCartDiscount = shoppingCart.TotalPrice * shoppingCart.coupon.Discount;
+            _mockShoppingCart.SetupGet(cart => cart.TotalPrice).Returns(100.0);
+            SimulateConsoleInput("N");
 
-            _mockCouponProcessor.Setup(x => x.ApplyCoupon(shoppingCart))
-                .Returns(shoppingCart.TotalPrice - shoppingCartDiscount);
-            
-            shoppingCart.TotalPrice = shoppingCart.TotalPrice - shoppingCartDiscount;
+            var result = _couponHandler.HandleUserSelection(_mockShoppingCart.Object);
 
-            using (var consoleInput = new ConsoleInput("Y", "1"))
-            using (var consoleOutput = new ConsoleOutput())
-            {
-                var finalTotal = _couponHandler.HandleUserSelection(shoppingCart);
-
-                Assert.AreEqual(discountedTotal, finalTotal);
-                _mockCouponProcessor.Verify(x => x.ApplyCoupon(shoppingCart), Times.Once);
-            }
-        }
-        /*
-        [TestMethod]
-        public void HandleUserSelection_ShouldNotApplyCoupon_WhenUserSelectsNo()
-        {
-            var shoppingCart = new List<CartItem>
-            {
-                new CartItem { Id = 1, Name = "Item1", Quantity = 2, Price = 20.0 }
-            };
-            double shoppingCartTotal = 40.0;
-
-            using (var consoleInput = new ConsoleInput("N"))
-            using (var consoleOutput = new ConsoleOutput())
-            {
-                var finalTotal = _couponHandler.HandleUserSelection(shoppingCart, shoppingCartTotal);
-
-                Assert.AreEqual(shoppingCartTotal, finalTotal);
-                _mockCouponProcessor.Verify(x => x.ShowAvailableCoupons(It.IsAny<IEnumerable<Coupon>>()), Times.Never);
-                _mockCouponProcessor.Verify(x => x.ApplyCoupon(It.IsAny<int>(), shoppingCart, It.IsAny<IEnumerable<Coupon>>(), shoppingCartTotal), Times.Never);
-            }
+            Assert.AreEqual(100.0, result);
         }
 
         [TestMethod]
-        public void HandleUserSelection_ShouldHandleInvalidInput()
+        public void HandleUserSelection_ShouldApplyCoupon_WhenUserSelectsValidCoupon()
         {
-            var shoppingCart = new List<CartItem>
-            {
-                new CartItem { Id = 1, Name = "Item1", Quantity = 2, Price = 20.0 }
-            };
-            double shoppingCartTotal = 40.0;
+            _mockShoppingCart.SetupProperty(cart => cart.coupon);
 
-            using (var consoleInput = new ConsoleInput("X", "N"))
-            using (var consoleOutput = new ConsoleOutput())
-            {
-                var finalTotal = _couponHandler.HandleUserSelection(shoppingCart, shoppingCartTotal);
+            _mockCouponStrategies[0].Setup(s => s.IsApplicable(It.IsAny<ICoupon>())).Returns(true);
+            _mockCouponProcessor.Setup(processor => processor.ApplyCoupon(_mockShoppingCart.Object));
 
-                Assert.AreEqual(shoppingCartTotal, finalTotal);
-                StringAssert.Contains(consoleOutput.GetOutput(), "Sorry X is not a valid input. Please enter Y or N.");
-            }
-        }*/
+            SimulateConsoleInput("Y", "1");
+
+            _couponHandler.HandleUserSelection(_mockShoppingCart.Object);
+
+            Assert.IsNotNull(_mockShoppingCart.Object.coupon);
+            _mockCouponProcessor.Verify(processor => processor.ApplyCoupon(_mockShoppingCart.Object), Times.Once);
+        }
+
+        [TestMethod]
+        public void GetCouponDetails_ShouldThrowException_WhenCouponIdIsInvalid()
+        {
+            SimulateConsoleInput("Y", "999");
+
+            Assert.ThrowsException<InvalidOperationException>(() =>
+                _couponHandler.HandleUserSelection(_mockShoppingCart.Object));
+        }
+
+        private void SimulateConsoleInput(params string[] inputs)
+        {
+            var inputQueue = new Queue<string>(inputs);
+            Console.SetIn(new System.IO.StringReader(string.Join(Environment.NewLine, inputQueue)));
+        }
     }
 }
